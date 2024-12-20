@@ -34,25 +34,19 @@
         "columns": 8
       },
       "id": "Field_0rq03aw",
-      "key": "mobilenr",
-      "description": "Mobilenummer",
+      "key": "teln",
+      "description": "Geschäftsnummer",
       "properties": {}
     },
     {
-      "subtype": "date",
-      "dateLabel": "Eintrittsdatum",
-      "label": "Date time",
-      "type": "datetime",
+      "label": "Mobilenummer",
+      "type": "textfield",
       "layout": {
         "row": "Row_06l7pg3",
         "columns": null
       },
-      "id": "Field_0beyew7",
-      "key": "entrydate",
-      "validate": {
-        "required": true
-      },
-      "disallowPassedDates": true
+      "id": "Field_04bm0q1",
+      "key": "mobilenr"
     },
     {
       "values": [
@@ -110,6 +104,41 @@
       }
     },
     {
+      "label": "Position",
+      "type": "textfield",
+      "layout": {
+        "row": "Row_0c7isth",
+        "columns": 8
+      },
+      "id": "Field_00rgnmj",
+      "key": "position"
+    },
+    {
+      "subtype": "date",
+      "dateLabel": "Eintrittsdatum",
+      "label": "Date time",
+      "type": "datetime",
+      "layout": {
+        "row": "Row_0c7isth",
+        "columns": null
+      },
+      "id": "Field_0beyew7",
+      "key": "entrydate",
+      "validate": {
+        "required": true
+      },
+      "disallowPassedDates": true
+    },
+    {
+      "label": "Separator",
+      "type": "separator",
+      "layout": {
+        "row": "Row_0lqnt9e",
+        "columns": null
+      },
+      "id": "Field_1v1k7e7"
+    },
+    {
       "values": [
         {
           "label": "Verwaltungsrat",
@@ -126,17 +155,62 @@
         {
           "label": "Lehrling",
           "value": "ma"
+        },
+        {
+          "label": "Schlüsselperson",
+          "value": "sp"
+        },
+        {
+          "label": "Sachbearbeitung (Verwaltung)",
+          "value": "sb"
         }
       ],
       "label": "Rollen",
       "type": "checklist",
       "layout": {
         "row": "Row_0bvqctu",
-        "columns": null
+        "columns": 8
       },
       "id": "Field_1dwlpvq",
       "key": "roles",
       "description": "Wellche Rollen hat die Person? (Ist für den SharePoint relevant)"
+    },
+    {
+      "values": [
+        {
+          "label": "rb",
+          "value": "rb"
+        },
+        {
+          "label": "dz",
+          "value": "dz"
+        },
+        {
+          "label": "fe",
+          "value": "fe"
+        },
+        {
+          "label": "dzw",
+          "value": "dzw"
+        }
+      ],
+      "label": "Vorgesetzte",
+      "type": "radio",
+      "layout": {
+        "row": "Row_0bvqctu",
+        "columns": null
+      },
+      "id": "Field_01sfogr",
+      "key": "manager"
+    },
+    {
+      "label": "Separator",
+      "type": "separator",
+      "layout": {
+        "row": "Row_0ojm8y3",
+        "columns": null
+      },
+      "id": "Field_0uvr9uf"
     },
     {
       "label": "Account Aktivieren",
@@ -149,6 +223,26 @@
       "key": "activate_field",
       "description": "Soll der Account gleich aktiviert werden?",
       "defaultValue": true
+    },
+    {
+      "action": "reset",
+      "label": "Zurücksezen",
+      "type": "button",
+      "layout": {
+        "row": "Row_0p37pay",
+        "columns": null
+      },
+      "id": "Field_0odbaj6"
+    },
+    {
+      "action": "submit",
+      "label": "Absenden",
+      "type": "button",
+      "layout": {
+        "row": "Row_0p37pay",
+        "columns": 2
+      },
+      "id": "Field_1g70mpq"
     }
   ],
   "type": "default",
