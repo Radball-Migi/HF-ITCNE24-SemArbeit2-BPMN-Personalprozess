@@ -1,58 +1,88 @@
 #*******************************************************************#
-# Script to Create a User with the Variables of the camunda Form    #
+# Script to Create a User with the Variables of the Camunda Form    #
 #*******************************************************************#
 
-#Debug of Executions
-Write-Host "Executions successful"
+# Camunda External Task Handler
+# Erforderliche Parameter
 
-return 
-
+$CamundaEndpoint = "http://localhost:8080/engine-rest" # Camunda REST API URL
+$WorkerId = "powershell-worker"                        # Worker-ID
+$TopicName = "SetStartUserCreation"                     # Topic-Name für den externen Task
+$MaxTasks = 1                                          # Maximale Anzahl von Tasks
+$LockDuration = 10000                                  # Lockdauer in Millisekunden
+$FetchAndLockEndpoint = "$CamundaEndpoint/external-task/fetchAndLock"
+$CompleteTaskEndpoint = "$CamundaEndpoint/external-task"
 
 
 #Functions
-#Umschreiben!!!!
 
-function Get-CamundaVars {
+# Logfunction for troubleshoot
+function Write-Log {
+    param (
+        [string]$Message,
+        [string]$LogStatus
+    )
 
-    # Get Variables from Camunda Form
-    $processInstanceId = "" #deine_prozessinstanz_id
-    $url = "http://localhost:8080/engine-rest/process-instance/$processInstanceId/variables" # Definiere die URL für den API-Aufruf
-    $response = Invoke-RestMethod -Uri $url -Method Get # Rufe die Variablenwerte über die Camunda REST API ab
-    $variables = $response | ConvertFrom-Json # Konvertiere die Antwort in ein PowerShell-Objekt
+    switch ($LogStatus) {
+        "Info" { Write-Host "$(Get-Date -Format 'yyyy-MM-dd HH:mm:ss'): $Message" }
+        "Error" {Write-Host "$(Get-Date -Format 'yyyy-MM-dd HH:mm:ss'): $Message" -ForegroundColor Red}
+        "Success" {Write-Host "$(Get-Date -Format 'yyyy-MM-dd HH:mm:ss'): $Message" -ForegroundColor Green}
+        Default { Write-Host "$(Get-Date -Format 'yyyy-MM-dd HH:mm:ss'): $Message" }
+    }  
+}
 
-    # Erstelle ein benutzerdefiniertes Objekt und füge die Variablen hinzu
-    $UserProps = New-Object PSObject
-    $UserProps | Add-Member -MemberType NoteProperty -Name "Name" -Value $variables.variable1.value
-    $UserProps | Add-Member -MemberType NoteProperty -Name "Surname" -Value $variables.variable2.value
-    $UserProps | Add-Member -MemberType NoteProperty -Name "DisplayName" -Value $variables.variable3.value
-    $UserProps | Add-Member -MemberType NoteProperty -Name "Department" -Value $variables.variable4.value
-    $UserProps | Add-Member -MemberType NoteProperty -Name "Office" -Value $variables.variable5.value
-    $UserProps | Add-Member -MemberType NoteProperty -Name "JobTitle" -Value $variables.variable6.value
-    $UserProps | Add-Member -MemberType NoteProperty -Name "Manager" -Value $variables.variable7.value
-    $UserProps | Add-Member -MemberType NoteProperty -Name "Position" -Value $variables.variable8.value
+# Funktion: Camunda Fetch and Lock
+function Camunda-FetchAndLock-Task {
+    Write-Log -Message "Starte FetchAndLock von Tasks..." -LogStatus "Info"
+    $payload = @{
+        workerId = $WorkerId
+        maxTasks = $MaxTasks
+        topics = @(
+            @{
+                topicName = $TopicName
+                lockDuration = $LockDuration
+            }
+        )
+    } | ConvertTo-Json -Depth 10
 
+    $response = Invoke-RestMethod -Uri $FetchAndLockEndpoint -Method Post -ContentType "application/json" -Body $payload
+    Write-Log -Message "FetchAndLock abgeschlossen." -LogStatus "Info"
+    return $response
+}
 
-    
-    return $UserProps
+# Funktion: Task abschliessen
+function Complete-Task {
+    param ([string]$TaskId, [hashtable]$Variables)
+
+    Write-Log -Message "Schließe Task ID: $TaskId ab..." -LogStatus "Info"
+    $payload = @{
+        workerId = $WorkerId
+        variables = $Variables
+    } | ConvertTo-Json -Depth 10
+
+    $response = Invoke-RestMethod -Uri "$CompleteTaskEndpoint/$TaskId/complete" -Method Post -ContentType "application/json" -Body $payload
+    Write-Log -Message "Task ID: $TaskId erfolgreich abgeschlossen." -LogStatus "Success"
+    return $response
 }
 
 function Import-Login {
-    
+    Write-Log -Message "Importiere Login-Informationen..." -LogStatus "Info"
     $Logininfos = Get-Content -Path ".\Logininfos.json" | ConvertFrom-Json
-
+    Write-Log -Message "Login-Informationen erfolgreich importiert." -LogStatus "Info"
     return $Logininfos
-    
 }
 
 function Connect-MSG {
     param (
         [string]$Tenant = $null,
+        [string]$TenantID = $null,
         [string]$ClientID = $null,
         [string]$Thumbprint = $null
     )
 
-    Connect-MgGraph -ClientId $ClientID -CertificateThumbprint $Thumbprint -TenantId $Tenant -NoWelcome
-
+    Write-Log -Message "Verbindung mit Microsoft Graph wird hergestellt..." -LogStatus "Info"
+    Connect-MgGraph -ClientId $ClientID -CertificateThumbprint $Thumbprint -TenantId $TenantID -NoWelcome
+    Write-Log -Message "Verbindung mit Microsoft Graph erfolgreich hergestellt." -LogStatus "Success"
 }
 
 function Generate-Password {
@@ -60,11 +90,11 @@ function Generate-Password {
         [int]$length = 1
     )
 
+    Write-Log -Message "Generiere Passwort..." -LogStatus "Info"
     $words = "Bananen" , "Backofen" , "Schüssel" , "Computer" , "Rucksack" , "Teigling" , "Handtuch" , "Fernseh" , "Füller" , "Tische" , "Wanduhr" , "Zitronen" , "Erdbeere" , "Tomaten" , "Freiburg" , "Rümlang" , "Zermatt" , "Willisau" , "Aprikose" , "Pflaumen"
     $specialChars = "!", "$", "?", "%", "#", "&", "+", "." 
     $numbers = 0..9
 
-    # Ersetzungstabelle
     $replaceTable = @{
         'a' = '@';
         'e' = '3';
@@ -80,7 +110,6 @@ function Generate-Password {
                 $specialChar = $specialChars[(Get-Random -Maximum $specialChars.length)]
                 $number = $numbers[(Get-Random -Maximum $numbers.length)]
 
-                # Ersetze Zeichen im Wort
                 foreach ($key in $replaceTable.Keys) {
                     $word = $word -replace $key, $replaceTable[$key]
                 }
@@ -94,6 +123,7 @@ function Generate-Password {
         $passwords += $password
     }
 
+    Write-Log -Message "Passwort erfolgreich generiert." -LogStatus "Success"
     return $passwords
 }
 
@@ -102,20 +132,20 @@ function New-Password {
         [int]$length = 1,
         $Debug = $false
     )
-    
-    # Passwort generieren
+
+    Write-Log -Message "Erstelle neues Passwort..." -LogStatus "Info"
     $passwords = Generate-Password -length $length
 
     switch ($Debug) {
         $true { 
             foreach ($password in $passwords) {
-            Write-Output $password
+                Write-Output $password
             } 
         }
-        $false {  }
+        $false { }
         Default { }
     }
-    return $password
+    return $passwords
 }
 
 function Check-UPN {
@@ -124,8 +154,10 @@ function Check-UPN {
         [string]$Surname = $null,
         [string]$Domain = "iseschool2013.onmicrosoft.com"
     )
-    
+
+    Write-Log -Message "Prüfe UPN..." -LogStatus "Info"
     if ($Name -eq $null -or $Surname -eq $null) {
+        Write-Log -Message "Fehler: Name oder Nachname fehlt." -LogStatus "Error"
         $fehler = "fehler"
         return $fehler
     }
@@ -135,7 +167,7 @@ function Check-UPN {
 
     do {
         $UPN = "$Name.$Surname$counter@$domain"
-        
+
         try {
             Get-MgUser -UserId $UPN -ErrorAction Stop
             $counter++
@@ -145,6 +177,7 @@ function Check-UPN {
         }
     } until ($upnFound)
 
+    Write-Log -Message "UPN gefunden: $UPN" -LogStatus "Success"
     return $UPN
 }
 
@@ -161,7 +194,8 @@ function Create-NewUser {
         [string]$UsageLocation = "Switzerland",
         [bool]$AccountEnabled = $true
     )
-    
+
+    Write-Log -Message "Erstelle neuen Benutzer..." -LogStatus "Info"
     $UPN = Check-UPN -Name $Name -Surname $Surname -Domain $Domain
 
     $password = New-Password
@@ -181,22 +215,55 @@ function Create-NewUser {
         -AccountEnabled $AccountEnabled `
         -PasswordProfile @{Password = $SecurePassword}
 
+    Write-Log -Message "Benutzer $DisplayName mit UPN $UPN erfolgreich erstellt." -LogStatus "Success"
 }
 
-# Get Login
-$Logininfos = Import-Login
+while ($true) {
+    try {
+        $Tasks = Camunda-FetchAndLock-Task
+        if ($Tasks.Count -eq 0) {
+            Write-Log -Message "Keine Tasks gefunden. Warte..." -LogStatus "Info"
+            Start-Sleep -Seconds 5
+            continue
+        }
 
-    $Tenant = $Logininfos.Tenant
-    $ClientID = $Logininfos.ClientID
-    $Thumbprint = $Logininfos.Thumbprint
+        foreach ($Task in $Tasks) {
+            $TaskId = $Task.id
 
-# Connection
-Connect-MSG -Tenant $Tenant -ClientID $ClientID -Thumbprint $Thumbprint
+            Write-Log -Message "Verarbeite Task ID: $TaskId" -LogStatus "Info"
 
-# Get UserProps of Camunda Form
-$UserProps = Get-CamundaVars
+            # Get UserProps of Camunda Form
+            $UserProps = $Task.variables
 
-# Creation New User
-Create-NewUser -UserProps $UserProps
+            # Get Login
+            $Logininfos = Import-Login
 
+            $Tenant = $Logininfos.Tenant
+            $ClientID = $Logininfos.ClientID
+            $Thumbprint = $Logininfos.Thumbprint
 
+            # Connection
+            Connect-MSG -Tenant $Tenant -ClientID $ClientID -Thumbprint $Thumbprint
+
+            Write-Log -Message "Hole Benutzerinformationen von Camunda..." -LogStatus "Info"
+            $UserProps = Get-CamundaVars
+
+            # Creation New User
+            Create-NewUser -UserProps $UserProps
+
+            # Variablen für den Abschluss des Tasks
+            $outputVariables = @{
+                result = @{
+                    value = $result
+                    type = "Integer"
+                }
+            }
+
+            Complete-Task -TaskId $taskId -Variables $outputVariables
+            Write-Log -Message "Task ID: $taskId abgeschlossen." -LogStatus "Info"
+        }
+    } catch {
+        Write-Log -Message "Fehler: $_" -LogStatus "Error"
+        Start-Sleep -Seconds 5
+    }
+}

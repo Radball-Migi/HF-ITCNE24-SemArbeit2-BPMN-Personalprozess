@@ -160,3 +160,58 @@ Cer file               : C:\Users\miguel.schneider\PnP and MG Graph for Semarb2 
 AzureAppId/ClientId    : 058839a7-a056-47ad-8bf9-f56f230c6207
 
 ```
+
+Instll der Module: 
+
+```PowerShell
+# PowerShell-Skript zum Herunterladen, Installieren und Importieren der benötigten Microsoft Graph Module auf CAmunda docker container
+
+# Modul-Installationsfunktion
+function Install-GraphModule {
+    param (
+        [string]$ModuleName
+    )
+    try {
+        Write-Host "Installing module: $ModuleName"
+        Install-Module -Name $ModuleName -Scope CurrentUser -Force -AllowClobber
+        Write-Host "Successfully installed module: $ModuleName"
+    } catch {
+        Write-Host "Failed to install module: $ModuleName"
+        Write-Host $_.Exception.Message
+    }
+}
+
+# Benötigte Module
+$modules = @(
+    "Microsoft.Graph.Authentication",
+    "Microsoft.Graph.Users",
+    "Microsoft.Graph.Groups"
+)
+
+# Module installieren
+foreach ($module in $modules) {
+    Install-GraphModule -ModuleName $module
+}
+
+# Module importieren
+foreach ($module in $modules) {
+    try {
+        Write-Host "Importing module: $module"
+        Import-Module $module -Force -ErrorAction Stop
+        Write-Host "Successfully imported module: $module"
+    } catch {
+        Write-Host "Failed to import module: $module"
+        Write-Host $_.Exception.Message
+    }
+}
+
+# Verbindung zu Microsoft Graph herstellen
+try {
+    Write-Host "Connecting to Microsoft Graph"
+    Connect-MgGraph -Scopes "User.ReadWrite.All", "Group.ReadWrite.All"
+    Write-Host "Successfully connected to Microsoft Graph"
+} catch {
+    Write-Host "Failed to connect to Microsoft Graph"
+    Write-Host $_.Exception.Message
+}
+```

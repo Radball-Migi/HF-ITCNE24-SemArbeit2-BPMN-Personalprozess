@@ -107,12 +107,11 @@
   </bpmn:process>
   <bpmn:process id="Process_12agnw0" isExecutable="true" camunda:historyTimeToLive="180" camunda:isStartableInTasklist="false">
     <bpmn:sequenceFlow id="Flow_0egu9v6" sourceRef="Event_126qrj0" targetRef="Gateway_08xrcji" />
-    <bpmn:sequenceFlow id="Flow_0hunvua" sourceRef="Gateway_07auj61" targetRef="gl_info_preps_done" />
     <bpmn:sequenceFlow id="Flow_0dylkbz" sourceRef="gl_info_preps_done" targetRef="gl_whait_firstday" />
     <bpmn:sequenceFlow id="Flow_0g66mhu" sourceRef="gl_whait_firstday" targetRef="gl_onboarding" />
     <bpmn:sequenceFlow id="Flow_1x934gm" sourceRef="gl_onboarding" targetRef="gl_onboarding_done" />
     <bpmn:sequenceFlow id="Flow_1mxmge0" sourceRef="gl_onboarding_done" targetRef="Event_0spuiue" />
-    <bpmn:sequenceFlow id="Flow_1gdbaig" sourceRef="Event_01x066k" targetRef="Gateway_07auj61" />
+    <bpmn:sequenceFlow id="Flow_1gdbaig" sourceRef="Event_01x066k" targetRef="gl_info_preps_done" />
     <bpmn:sequenceFlow id="Flow_1h1jpyg" name="Nein" sourceRef="Gateway_08xrcji" targetRef="Activity_1ksjlln">
       <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${false}</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
@@ -129,10 +128,6 @@
       <bpmn:incoming>Flow_1h1jpyg</bpmn:incoming>
       <bpmn:outgoing>Flow_1oy3jvd</bpmn:outgoing>
     </bpmn:manualTask>
-    <bpmn:parallelGateway id="Gateway_07auj61">
-      <bpmn:incoming>Flow_1gdbaig</bpmn:incoming>
-      <bpmn:outgoing>Flow_0hunvua</bpmn:outgoing>
-    </bpmn:parallelGateway>
     <bpmn:endEvent id="Event_0spuiue" name="Mitarbeiter Eintritt abgeschlossen">
       <bpmn:incoming>Flow_1mxmge0</bpmn:incoming>
     </bpmn:endEvent>
@@ -156,7 +151,7 @@
       <bpmn:outgoing>Flow_1gdbaig</bpmn:outgoing>
     </bpmn:intermediateThrowEvent>
     <bpmn:intermediateThrowEvent id="gl_info_preps_done" name="Vorbereitungen abgeschlossen">
-      <bpmn:incoming>Flow_0hunvua</bpmn:incoming>
+      <bpmn:incoming>Flow_1gdbaig</bpmn:incoming>
       <bpmn:outgoing>Flow_0dylkbz</bpmn:outgoing>
     </bpmn:intermediateThrowEvent>
     <bpmn:intermediateThrowEvent id="gl_onboarding_done" name="Onboarding abgeschlossen">
@@ -324,9 +319,6 @@
       <bpmndi:BPMNShape id="Activity_171fnnd_di" bpmnElement="Activity_1ksjlln">
         <dc:Bounds x="607" y="990" width="100" height="80" />
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Gateway_07auj61_di" bpmnElement="Gateway_07auj61">
-        <dc:Bounds x="1185" y="895" width="50" height="50" />
-      </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Event_0spuiue_di" bpmnElement="Event_0spuiue">
         <dc:Bounds x="1809" y="902" width="36" height="36" />
         <bpmndi:BPMNLabel>
@@ -370,10 +362,6 @@
         <di:waypoint x="565" y="920" />
         <di:waypoint x="632" y="920" />
       </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_0hunvua_di" bpmnElement="Flow_0hunvua">
-        <di:waypoint x="1235" y="920" />
-        <di:waypoint x="1319" y="920" />
-      </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_0dylkbz_di" bpmnElement="Flow_0dylkbz">
         <di:waypoint x="1355" y="920" />
         <di:waypoint x="1419" y="920" />
@@ -392,7 +380,7 @@
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_1gdbaig_di" bpmnElement="Flow_1gdbaig">
         <di:waypoint x="828" y="920" />
-        <di:waypoint x="1185" y="920" />
+        <di:waypoint x="1319" y="920" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_1h1jpyg_di" bpmnElement="Flow_1h1jpyg">
         <di:waypoint x="657" y="945" />
