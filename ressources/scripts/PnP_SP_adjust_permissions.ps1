@@ -31,6 +31,12 @@ function Get-CamundaVars {
     return $UserProps
 }
 
+function Import-Login {
+    
+    ConvertFrom-Json 
+    
+}
+
 function Connect-MSGandPnP {
     param (
         [string]$Tenant = "",
@@ -38,6 +44,8 @@ function Connect-MSGandPnP {
         [string]$Thumbprint = "",
         [string]$TenantAdminUrl = ""
     )
+
+    
 
     Connect-MgGraph -ClientId $ClientID -CertificateThumbprint $Thumbprint -TenantId $Tenant -NoWelcome
     Connect-PnPOnline -Url $TenantAdminUrl -ClientId $ClientID -Thumbprint $Thumbprint

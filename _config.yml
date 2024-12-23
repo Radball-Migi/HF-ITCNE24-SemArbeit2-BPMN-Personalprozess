@@ -49,6 +49,7 @@ exclude:
 # Enter path with to exclude a file
   - ressources/notizen/
   - documentation/Hauptteil/Notizen_aufbau.md
+  - ressources/scripts/Logininfos.json
   
 
 # Exclude from processing.

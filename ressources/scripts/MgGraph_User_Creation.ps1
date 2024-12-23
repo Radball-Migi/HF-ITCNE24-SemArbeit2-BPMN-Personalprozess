@@ -36,12 +36,19 @@ function Get-CamundaVars {
     return $UserProps
 }
 
+function Import-Login {
+    
+    $Logininfos = Get-Content -Path ".\Logininfos.json" | ConvertFrom-Json
+
+    return $Logininfos
+    
+}
 
 function Connect-MSG {
     param (
-        [string]$Tenant = "",
-        [string]$ClientID = "",
-        [string]$Thumbprint = ""
+        [string]$Tenant = $null,
+        [string]$ClientID = $null,
+        [string]$Thumbprint = $null
     )
 
     Connect-MgGraph -ClientId $ClientID -CertificateThumbprint $Thumbprint -TenantId $Tenant -NoWelcome
@@ -176,8 +183,15 @@ function Create-NewUser {
 
 }
 
+# Get Login
+$Logininfos = Import-Login
+
+    $Tenant = $Logininfos.Tenant
+    $ClientID = $Logininfos.ClientID
+    $Thumbprint = $Logininfos.Thumbprint
+
 # Connection
-Connect-MSG 
+Connect-MSG -Tenant $Tenant -ClientID $ClientID -Thumbprint $Thumbprint
 
 # Get UserProps of Camunda Form
 $UserProps = Get-CamundaVars
