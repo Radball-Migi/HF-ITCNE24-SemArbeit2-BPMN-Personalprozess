@@ -10,7 +10,7 @@
       "id": "Field_17430i6",
       "key": "firstname",
       "validate": {
-        "required": true
+        "required": false
       }
     },
     {
@@ -23,7 +23,7 @@
       "id": "Field_0buhmva",
       "key": "surname",
       "validate": {
-        "required": true
+        "required": false
       }
     },
     {
@@ -125,7 +125,7 @@
       "id": "Field_0beyew7",
       "key": "entrydate",
       "validate": {
-        "required": true
+        "required": false
       },
       "disallowPassedDates": true
     },
@@ -145,7 +145,7 @@
           "value": "vr"
         },
         {
-          "label": "Gschäfftsleitung",
+          "label": "Geschäftsleitung",
           "value": "gl"
         },
         {
@@ -226,7 +226,7 @@
     },
     {
       "action": "reset",
-      "label": "Zurücksezen",
+      "label": "Zurücksetzen",
       "type": "button",
       "layout": {
         "row": "Row_0p37pay",

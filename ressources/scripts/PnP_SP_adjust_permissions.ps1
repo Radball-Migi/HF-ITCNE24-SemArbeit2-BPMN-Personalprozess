@@ -2,6 +2,11 @@
 # Script to adjust the Accessrights in SharePoint for the User      #
 #*******************************************************************#
 
+#Debug of Executions
+Write-Host "Executions successful"
+
+return 
+
 
 function Get-CamundaVars {
 
@@ -28,10 +33,10 @@ function Get-CamundaVars {
 
 function Connect-MSGandPnP {
     param (
-        [string]$Tenant = "iseschool2013.onmicrosoft.com",
-        [string]$ClientID = "058839a7-a056-47ad-8bf9-f56f230c6207",
-        [string]$Thumbprint = "E5925A74E30F1C09CC38744486C8317CEEF88F87",
-        [string]$TenantAdminUrl = "iseschool2013-admin.sharepoint.com"
+        [string]$Tenant = "",
+        [string]$ClientID = "",
+        [string]$Thumbprint = "",
+        [string]$TenantAdminUrl = ""
     )
 
     Connect-MgGraph -ClientId $ClientID -CertificateThumbprint $Thumbprint -TenantId $Tenant -NoWelcome
@@ -42,4 +47,4 @@ function Connect-MSGandPnP {
 
 
 
-$UserPros = Get-CamundaVars
+$UserProps = Get-CamundaVars
