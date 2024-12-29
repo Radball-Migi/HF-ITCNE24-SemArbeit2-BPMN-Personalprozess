@@ -215,3 +215,32 @@ try {
     Write-Host $_.Exception.Message
 }
 ```
+
+Kopieren einer DAte vom Lokalen Comupter zu einem Docker Container
+
+```Terminal
+docker cp "C:\Users\miguel.schneider\OneDrive - TBZ\GitHub_Repos_HF\HF-ITCNE24-SemArbeit2-BPMN-Personalprozess\ressources\scripts\MgGraph_User_Creation.ps1" c3df7a5aad77693a30eba71db575749b220b276ff37f004658cc96f7de58f1bf:/tmp/scripts
+```
+
+```Output
+Successfully copied 10.8kB to c3df7a5aad77693a30eba71db575749b220b276ff37f004658cc96f7de58f1bf:/tmp/scripts
+```
+
+Installation von openssl (History auszug)
+
+```Terminal
+  15 chmod u+s /bin/su
+  16 apk update
+  17 apk add oppenssl
+  18 apk add curl wget
+  19 apk add oppenssl
+  20 apk update
+  21 apk upgrade
+  22 apk add openssl
+```
+
+Adminconnection auf Docker Container als Root:
+
+```Terminal
+docker exec -it --user root <Container Name> /bin/sh
+```

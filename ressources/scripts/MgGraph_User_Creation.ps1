@@ -25,6 +25,7 @@ function Write-Log {
 
     switch ($LogStatus) {
         "Info" { Write-Host "$(Get-Date -Format 'yyyy-MM-dd HH:mm:ss'): $Message" }
+        "Warning" { Write-Host "$(Get-Date -Format 'yyyy-MM-dd HH:mm:ss'): $Message" -ForegroundColor Yellow }
         "Error" {Write-Host "$(Get-Date -Format 'yyyy-MM-dd HH:mm:ss'): $Message" -ForegroundColor Red}
         "Success" {Write-Host "$(Get-Date -Format 'yyyy-MM-dd HH:mm:ss'): $Message" -ForegroundColor Green}
         Default { Write-Host "$(Get-Date -Format 'yyyy-MM-dd HH:mm:ss'): $Message" }
@@ -67,8 +68,25 @@ function Complete-Task {
 
 function Import-Login {
     Write-Log -Message "Importiere Login-Informationen..." -LogStatus "Info"
-    $Logininfos = Get-Content -Path ".\Logininfos.json" | ConvertFrom-Json
-    Write-Log -Message "Login-Informationen erfolgreich importiert." -LogStatus "Info"
+
+    $TestPath = "/tmp/scripts/Logininfos_camundacontainer.json"
+    $PathCamundaContainer = "/tmp/scripts/Logininfos_camundacontainer.json"
+    $PathLocal = "./Logininfos_local.json"
+    
+
+    if (Test-Path -Path $TestPath) {
+        
+        Write-Log -Message "Login-Informationen von Camunda-Server importieren" -LogStatus "Warning"
+        $Logininfos = Get-Content -Path $PathCamundaContainer | ConvertFrom-Json
+
+    }else {
+       
+        Write-Log -Message "Login-Informationen von Local importieren" -LogStatus "Warning"
+        $Logininfos = Get-Content -Path $PathLocal | ConvertFrom-Json
+        
+    }
+        
+    Write-Log -Message "Login-Informationen erfolgreich importiert." -LogStatus "Success"
     return $Logininfos
 }
 
@@ -81,8 +99,21 @@ function Connect-MSG {
     )
 
     Write-Log -Message "Verbindung mit Microsoft Graph wird hergestellt..." -LogStatus "Info"
+
+
     Connect-MgGraph -ClientId $ClientID -CertificateThumbprint $Thumbprint -TenantId $TenantID -NoWelcome
-    Write-Log -Message "Verbindung mit Microsoft Graph erfolgreich hergestellt." -LogStatus "Success"
+
+    # try {
+
+    #     Connect-MgGraph -ClientId $ClientID -CertificateThumbprint $Thumbprint -TenantId $TenantID -NoWelcome -ErrorAction Stop
+    #     Write-Log -Message "Verbindung mit Microsoft Graph erfolgreich hergestellt." -LogStatus "Success"
+
+    # }
+    # catch {
+        
+    #     Write-Log -Message "Verbindung mit Microsoft Graph konnte nicht gemacht werden, Abbruch" -LogStatus "Error"
+    #     exit 1
+    # }
 }
 
 function Generate-Password {
@@ -232,8 +263,17 @@ while ($true) {
 
             Write-Log -Message "Verarbeite Task ID: $TaskId" -LogStatus "Info"
 
+            
+            #*****************************************************************************************************************************************************
+            #-----------------------------------------------------------------------------------------------------------------------------------------------------
+            # Taskpart, welcher ausgeführt wird pro Instanz                                                                                                      ¦
+            #-----------------------------------------------------------------------------------------------------------------------------------------------------
+
             # Get UserProps of Camunda Form
+            Write-Log -Message "Hole Benutzerinformationen von Camunda..." -LogStatus "Info"
             $UserProps = $Task.variables
+
+            $UserProps
 
             # Get Login
             $Logininfos = Import-Login
@@ -241,15 +281,16 @@ while ($true) {
             $Tenant = $Logininfos.Tenant
             $ClientID = $Logininfos.ClientID
             $Thumbprint = $Logininfos.Thumbprint
+            $TenantId = $Logininfos.TenantId
 
             # Connection
-            Connect-MSG -Tenant $Tenant -ClientID $ClientID -Thumbprint $Thumbprint
+            Connect-MSG -Tenant $Tenant -ClientID $ClientID -Thumbprint $Thumbprint -TenantID $TenantId
 
-            Write-Log -Message "Hole Benutzerinformationen von Camunda..." -LogStatus "Info"
-            $UserProps = Get-CamundaVars
 
-            # Creation New User
-            Create-NewUser -UserProps $UserProps
+            # # Creation New User
+            # Create-NewUser -UserProps $UserProps
+
+            #****************************************************************************************************************************************************
 
             # Variablen für den Abschluss des Tasks
             $outputVariables = @{
