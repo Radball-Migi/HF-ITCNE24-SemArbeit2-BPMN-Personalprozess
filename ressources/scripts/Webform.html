@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Camunda API Form</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background-color: #f4f4f9;
+            color: #333;
+            position: relative; /* Ermöglicht absolutes Positionieren */
+        }
+        .top-left {
+            position: absolute;
+            top: 10px;
+            left: 40px;
+            width: 200px;
+            height: 106px;
+            background-image: url('https://www.iseag.ch/wp-content/uploads/logo_iseag_transparent_400.png');
+            background-size: cover;
+            background-position: center; /* Zentriert das Bild innerhalb des Kreises */
+            background-repeat: no-repeat; /* Verhindert Wiederholung des Bildes */
+        }
+        .top-right {
+            position: absolute;
+            top: 10px;
+            right: 50px;
+            width: 150px;
+            height: 150px;
+            background-image: url('https://gdm-catalog-fmapi-prod.imgix.net/ProductLogo/91be7721-d1db-4f29-ab5f-94c4ed5b5308.png?w=128&h=128&fit=max&dpr=3&auto=format&q=50');
+            background-size: cover;
+            background-position: center; /* Zentriert das Bild innerhalb des Kreises */
+            background-repeat: no-repeat; /* Verhindert Wiederholung des Bildes */
+        }
+        form {
+            max-width: 600px;
+            margin: auto;
+            background: rgba(255, 255, 255, 0.8);
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            text-align: center;
+            color: #B1005D;
+            margin-bottom: 20px;
+            font-weight: bold;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        label {
+            display: block;
+            font-weight: bold;
+            margin-bottom: 5px;
+            color: #555;
+        }
+        input, select, textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            box-sizing: border-box;
+            background-color: #f9f9f9;
+        }
+        input:focus, select:focus, textarea:focus {
+            border-color: #B1005D;
+            outline: none;
+            background-color: #fff;
+        }
+        button {
+            padding: 10px 15px;
+            margin-right: 5px;
+            border-radius: 5px;
+            border: none;
+            font-size: 16px;
+            cursor: pointer;
+        }
+        .button-right {
+            float: right; /* Verschiebt den Button nach rechts */
+            margin-left: 10px; /* Optional: Abstand zwischen Buttons */
+        }
+        button[type="button"] {
+            background-color: #B1005D;
+            color: white;
+        }
+        button[type="button"]:hover {
+            background-color: #0056b3;
+        }
+        button[type="reset"] {
+            background-color: #f44336;
+            color: white;
+        }
+        button[type="reset"]:hover {
+            background-color: #c9302c;
+        }
+        #roles-options div, #manager-options div, #activate-options div {
+            display: flex;
+            align-items: center;
+            margin-bottom: 5px;
+        }
+        #roles-options label, #manager-options label, #activate-options label {
+            font-weight: normal;
+            margin: 0;
+        }
+        #roles-options, #manager-options, #activate-options {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+        }
+    </style>
+</head>
+<body>
+    <div class="top-left"></div>
+    <div class="top-right"></div>
+    <h1>ISE AG Benutzererfassung by Camunda</h1>
+    <form id="camundaForm">
+        <div class="form-group">
+            <label for="firstname">Vorname</label>
+            <input type="text" id="firstname" name="firstname" required>
+        </div>
+        <div class="form-group">
+            <label for="surname">Nachname</label>
+            <input type="text" id="surname" name="surname" required>
+        </div>
+        <div class="form-group">
+            <label for="teln">Telefonnummer</label>
+            <input type="text" id="teln" name="teln" placeholder="Geschäftsnummer">
+        </div>
+        <div class="form-group">
+            <label for="mobilenr">Mobilenummer</label>
+            <input type="text" id="mobilenr" name="mobilenr">
+        </div>
+        <div class="form-group">
+            <label for="office_team">Abteilung, Team</label>
+            <select id="office_team" name="office_team" onchange="toggleOfficeStud()">
+                <option value="dev_application">Applikation (Entwicklung)</option>
+                <option value="m365_application">Applikation (M365)</option>
+                <option value="eng_sys">Systemtechnik</option>
+                <option value="sup_sys">Systemtechnik (Support)</option>
+                <option value="stud">Lehrling</option>
+            </select>
+        </div>
+        <div class="form-group" id="office_stud_group" style="display: none;">
+            <label for="office_stud">Abteilung Lernende</label>
+            <select id="office_stud" name="office_stud">
+                <option value="application">Applikation</option>
+                <option value="system">Systemtechnik</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="position">Position</label>
+            <input type="text" id="position" name="position">
+        </div>
+        <div class="form-group">
+            <label for="entrydate">Eintrittsdatum</label>
+            <input type="date" id="entrydate" name="entrydate" min="">
+        </div>
+        <div class="form-group">
+            <label for="roles">Rollen</label>
+            <div id="roles-options">
+                <div>
+                    <input type="checkbox" id="role_vr" name="roles" value="vr">
+                    <label for="role_vr">Verwaltungsrat</label>
+                </div>
+                <div>
+                    <input type="checkbox" id="role_gl" name="roles" value="gl">
+                    <label for="role_gl">Geschäftsleitung</label>
+                </div>
+                <div>
+                    <input type="checkbox" id="role_stud" name="roles" value="stud">
+                    <label for="role_stud">Mitarbeiter</label>
+                </div>
+                <div>
+                    <input type="checkbox" id="role_ma" name="roles" value="ma">
+                    <label for="role_ma">Lehrling</label>
+                </div>
+                <div>
+                    <input type="checkbox" id="role_sp" name="roles" value="sp">
+                    <label for="role_sp">Schlüsselperson</label>
+                </div>
+                <div>
+                    <input type="checkbox" id="role_sb" name="roles" value="sb">
+                    <label for="role_sb">Sachbearbeitung</label>
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="manager">Vorgesetzte</label>
+            <div id="manager-options">
+                <div>
+                    <input type="radio" id="manager_rb" name="manager" value="rb">
+                    <label for="manager_rb">rb</label>
+                </div>
+                <div>
+                    <input type="radio" id="manager_dz" name="manager" value="dz">
+                    <label for="manager_dz">dz</label>
+                </div>
+                <div>
+                    <input type="radio" id="manager_fe" name="manager" value="fe">
+                    <label for="manager_fe">fe</label>
+                </div>
+                <div>
+                    <input type="radio" id="manager_dzw" name="manager" value="dzw">
+                    <label for="manager_dzw">dzw</label>
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="activate_account">Account Aktivieren</label>
+            <div id="activate-options"> 
+                <div>
+                    <label for="activate">Aktivieren?</label>
+                    <input type="checkbox" id="activate" name="activate_account" checked>  
+                </div>
+            </div>   
+        </div>        
+        <button type="reset">Zurücksetzen</button>
+        <button type="button" onclick="submitForm()" class="button-right">Absenden</button>
+    </form>
+
+    <script>
+        // Restrict entrydate to future dates
+        const today = new Date().toISOString().split('T')[0];
+        document.getElementById('entrydate').setAttribute('min', today);
+
+        // Toggle visibility of office_stud
+        function toggleOfficeStud() {
+            const officeTeam = document.getElementById('office_team').value;
+            const officeStudGroup = document.getElementById('office_stud_group');
+
+            if (officeTeam === 'stud') {
+                officeStudGroup.style.display = 'block';
+            } else {
+                officeStudGroup.style.display = 'none';
+            }
+        }
+
+        async function submitForm() {
+            const formData = new FormData(document.getElementById('camundaForm'));
+            const data = {};
+
+            // Process form data
+            for (const [key, value] of formData.entries()) {
+                if (key === 'activate_field') {
+                    data[key] = document.getElementById(key).checked;
+                } else if (key === 'roles' || key === 'manager') {
+                    if (!data[key]) data[key] = [];
+                    data[key].push(value);
+                } else {
+                    data[key] = value;
+                }
+            }
+
+            const payload = {};
+            for (const key in data) {
+                payload[key] = {
+                    type: Array.isArray(data[key]) ? 'Json' : typeof data[key] === 'boolean' ? 'Boolean' : 'String',
+                    value: data[key],
+                    valueInfo: {}
+                };
+            }
+
+            try {
+                const response = await fetch('http://localhost:8080/engine-rest/', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(payload)
+                });
+
+                if (response.ok) {
+                    alert('Data successfully sent!');
+                } else {
+                    const error = await response.json();
+                    console.error('Error:', error);
+                    alert('Error sending data. Check console for details.');
+                }
+            } catch (error) {
+                console.error('Network error:', error);
+                alert('Network error occurred.');
+            }
+        }
+    </script>
+</body>
+</html>

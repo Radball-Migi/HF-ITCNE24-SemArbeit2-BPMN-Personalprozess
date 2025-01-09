@@ -244,3 +244,19 @@ Adminconnection auf Docker Container als Root:
 ```Terminal
 docker exec -it --user root <Container Name> /bin/sh
 ```
+
+Values welche von Camunda übertragen werden:
+
+```Output
+firstname      : @{type=String; value=Miguel; valueInfo=}
+entrydate      : @{type=Null; value=; valueInfo=}
+manager        : @{type=String; value=dz; valueInfo=}
+teln           : @{type=String; value=012 345 67 89; valueInfo=}
+surname        : @{type=String; value=Schneider; valueInfo=}
+roles          : @{type=Json; value=["stud"]; valueInfo=}
+start          : @{type=String; value=demo; valueInfo=}
+position       : @{type=String; value=Employee; valueInfo=}
+activate_field : @{type=Boolean; value=False; valueInfo=}
+mobilenr       : @{type=String; value=021 345 67 89; valueInfo=}
+office_team    : @{type=String; value=eng_sys; valueInfo=}
+```
