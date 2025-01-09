@@ -239,49 +239,60 @@
         }
 
         async function submitForm() {
-            const formData = new FormData(document.getElementById('camundaForm'));
-            const data = {};
+            const form = document.getElementById('camundaForm');
+            const formData = new FormData(form);
+            const variables = {};
+
+            // Initialize roles and manager as empty arrays
+            const roles = [];
+            const manager = [];
 
             // Process form data
             for (const [key, value] of formData.entries()) {
-                if (key === 'activate_field') {
-                    data[key] = document.getElementById(key).checked;
-                } else if (key === 'roles' || key === 'manager') {
-                    if (!data[key]) data[key] = [];
-                    data[key].push(value);
+                if (key === 'roles') {
+                    roles.push(value); // Collect all selected roles
+                } else if (key === 'manager') {
+                    manager.push(value); // Collect selected manager (only one should exist)
+                } else if (key === 'activate_account') {
+                    variables[key] = { type: 'Boolean', value: document.getElementById('activate').checked };
                 } else {
-                    data[key] = value;
+                    variables[key] = { type: 'String', value: value };
                 }
             }
 
-            const payload = {};
-            for (const key in data) {
-                payload[key] = {
-                    type: Array.isArray(data[key]) ? 'Json' : typeof data[key] === 'boolean' ? 'Boolean' : 'String',
-                    value: data[key],
-                    valueInfo: {}
-                };
+            // Add roles and manager to variables if they have values
+            if (roles.length > 0) {
+                variables['roles'] = { type: 'Json', value: JSON.stringify(roles) };
             }
 
+            if (manager.length > 0) {
+                variables['manager'] = { type: 'String', value: manager[0] }; // Only one manager should be selected
+            }
+
+            const payload = {
+                name: "Start_new_employee", // Signal name
+                variables: variables,
+            };
+
             try {
-                const response = await fetch('http://localhost:8080/engine-rest/', {
+                const response = await fetch('http://localhost:8080/engine-rest/signal', {
                     method: 'POST',
                     headers: {
-                        'Content-Type': 'application/json'
+                        'Content-Type': 'application/json',
                     },
-                    body: JSON.stringify(payload)
+                    body: JSON.stringify(payload),
                 });
 
                 if (response.ok) {
-                    alert('Data successfully sent!');
+                    alert('Prozessinstanz erfolgreich gestartet!');
                 } else {
                     const error = await response.json();
-                    console.error('Error:', error);
-                    alert('Error sending data. Check console for details.');
+                    console.error('Fehler:', error);
+                    alert('Fehler beim Starten der Prozessinstanz. Details in der Konsole.');
                 }
             } catch (error) {
-                console.error('Network error:', error);
-                alert('Network error occurred.');
+                console.error('Netzwerkfehler:', error);
+                alert('Netzwerkfehler aufgetreten.');
             }
         }
     </script>
