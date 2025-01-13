@@ -103,17 +103,6 @@ function Connect-MSG {
 
     Connect-MgGraph -ClientId $ClientID -CertificateThumbprint $Thumbprint -TenantId $TenantID -NoWelcome
 
-    # try {
-
-    #     Connect-MgGraph -ClientId $ClientID -CertificateThumbprint $Thumbprint -TenantId $TenantID -NoWelcome -ErrorAction Stop
-    #     Write-Log -Message "Verbindung mit Microsoft Graph erfolgreich hergestellt." -LogStatus "Success"
-
-    # }
-    # catch {
-        
-    #     Write-Log -Message "Verbindung mit Microsoft Graph konnte nicht gemacht werden, Abbruch" -LogStatus "Error"
-    #     exit 1
-    # }
 }
 
 function Generate-Password {

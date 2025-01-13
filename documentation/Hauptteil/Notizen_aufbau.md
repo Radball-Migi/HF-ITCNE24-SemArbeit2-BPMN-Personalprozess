@@ -260,3 +260,6 @@ activate_field : @{type=Boolean; value=False; valueInfo=}
 mobilenr       : @{type=String; value=021 345 67 89; valueInfo=}
 office_team    : @{type=String; value=eng_sys; valueInfo=}
 ```
+
+
+Mögliche Nachrichten Probleme und Zuweisungsfehler mit Benutzern lösen in Camunda.
