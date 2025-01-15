@@ -36,9 +36,15 @@ Bild mit KI generiert (<a href="https://copilot.cloud.microsoft/" target="_blank
 [Search results for Define - Flaticon](https://www.flaticon.com/free-icon/define_12642154?term=define&page=1&position=47&origin=search&related_id=12642154)
 #### Measure Phase
 [Search results for Measure process - Flaticon](https://www.flaticon.com/free-icon/lean_9464400?term=measure+process&related_id=9464400)
-
 #### Analyze Phase
 [Search results for Evaluation and analysis - Flaticon](https://www.flaticon.com/free-icon/analysis_18517653?term=evaluation+and+analysis&page=1&position=55&origin=search&related_id=18517653)
+#### Improve Phase 
+[Search results for Evaluation and analysis - Flaticon](https://www.flaticon.com/free-icon/improvement_3930474?term=improve&related_id=3930474)
+#### Camunda Logo
+[Camunda](https://camunda.com/brand/)
+#### Control Phase
+[Search results for Control - Flaticon](https://www.flaticon.com/free-icon/security_6310151?term=control&page=1&position=6&origin=search&related_id=6310151)
+
 
 ### Sprints
 

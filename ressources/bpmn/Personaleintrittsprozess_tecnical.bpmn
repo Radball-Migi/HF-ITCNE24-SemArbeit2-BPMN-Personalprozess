@@ -93,7 +93,7 @@
       <bpmn:signalEventDefinition id="SignalEventDefinition_0hgkdyy" signalRef="Signal_25t6doe" />
     </bpmn:intermediateCatchEvent>
   </bpmn:process>
-  <bpmn:process id="Process_12agnw0" isExecutable="true" camunda:historyTimeToLive="180" camunda:isStartableInTasklist="false">
+  <bpmn:process id="Process_12agnw0" isExecutable="true" camunda:historyTimeToLive="180">
     <bpmn:intermediateCatchEvent id="gl_whait_firstday" name="Warten bis erster Arbeitstag">
       <bpmn:incoming>Flow_0dylkbz</bpmn:incoming>
       <bpmn:outgoing>Flow_0g66mhu</bpmn:outgoing>
