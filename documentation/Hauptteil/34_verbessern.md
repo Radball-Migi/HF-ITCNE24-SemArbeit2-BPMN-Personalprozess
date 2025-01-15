@@ -14,7 +14,7 @@ Die Improve-Phase ist der vierte Schritt in einem Six Sigma Projekt. In dieser P
 
 
 
-![Logo Camunda](../../ressources/images/Logo_Black_Camunda.png)
+![Logo Camunda](../../ressources/images/logo_black_camunda.png)
 
 Camunda ist eine leistungsstarke Softwareplattform, die Unternehmen dabei unterstützt, ihre Geschäftsprozesse effizient zu steuern. Sie bietet umfassende Funktionen für das Business Process Management (BPM) und die Automatisierung von Workflows.
 
