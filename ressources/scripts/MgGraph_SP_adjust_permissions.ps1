@@ -95,21 +95,19 @@ function Import-Login {
     return $Logininfos
 }
 
-function Connect-PnP {
+function Connect-MSG {
     param (
         [string]$Tenant = $null,
         [string]$TenantID = $null,
         [string]$ClientID = $null,
-        [string]$Thumbprint = $null,
-        [string]$AdminUrl = $null
+        [string]$Thumbprint = $null
     )
 
-    Write-Log -Message "Verbindung mit PnP Online wird hergestellt..." -LogStatus "Info"
+    Write-Log -Message "Verbindung mit Microsoft Graph wird hergestellt..." -LogStatus "Info"
 
 
-    Connect-PnPOnline -Url $AdminUrl -ClientId $ClientID -Thumbprint $Thumbprint -NoWelcome
+    Connect-MgGraph -ClientId $ClientID -CertificateThumbprint $Thumbprint -TenantId $TenantID -NoWelcome
 
-    Write-Log -Message "Verbindung mit "$AdminUrl" erfolgreich hergestellt." -LogStatus "Success"
 }
 
 while ($true) {
@@ -145,10 +143,9 @@ while ($true) {
             $ClientID = $Logininfos.ClientID
             $Thumbprint = $Logininfos.Thumbprint
             $TenantId = $Logininfos.TenantId
-            $AdminUrl = $Logininfos.TenantAdminUrl
 
             # Connection
-            Connect-PnP -Tenant $Tenant -ClientID $ClientID -Thumbprint $Thumbprint -TenantID $TenantId
+            Connect-MSG -Tenant $Tenant -ClientID $ClientID -Thumbprint $Thumbprint -TenantID $TenantId
 
             
             
