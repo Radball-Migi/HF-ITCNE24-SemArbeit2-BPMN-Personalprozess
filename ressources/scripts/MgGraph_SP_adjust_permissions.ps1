@@ -16,7 +16,6 @@ $MaxTasks = 1                                          # Maximale Anzahl von Tas
 $LockDuration = 10000                                  # Lockdauer in Millisekunden
 $FetchAndLockEndpoint = "$CamundaEndpoint/external-task/fetchAndLock"
 $CompleteTaskEndpoint = "$CamundaEndpoint/external-task"
-$SPMainSite = "https://iseschool2013.sharepoint.com/sites/misch-sem2arbeit/" # Main Site of the SharePoint
 
 
 #Functions
