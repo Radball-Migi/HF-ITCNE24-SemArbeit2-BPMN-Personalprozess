@@ -9,14 +9,13 @@
       <bpmn:lane id="employee">
         <bpmn:flowNodeRef>employee_whait_firstday</bpmn:flowNodeRef>
         <bpmn:flowNodeRef>task_employee_onboarding</bpmn:flowNodeRef>
-        <bpmn:flowNodeRef>service-task_set_sp-access</bpmn:flowNodeRef>
         <bpmn:flowNodeRef>service-task_new_user</bpmn:flowNodeRef>
         <bpmn:flowNodeRef>signal_catch_start_new_user</bpmn:flowNodeRef>
-        <bpmn:flowNodeRef>capture_userdata</bpmn:flowNodeRef>
         <bpmn:flowNodeRef>signal_trow_autorisation_request</bpmn:flowNodeRef>
         <bpmn:flowNodeRef>signal_throw_info_preps_done</bpmn:flowNodeRef>
         <bpmn:flowNodeRef>signal_throw_onboarding_done_end</bpmn:flowNodeRef>
         <bpmn:flowNodeRef>signal_catch_approve_request</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>service-task_set_sp-access</bpmn:flowNodeRef>
         <bpmn:childLaneSet id="LaneSet_16sxv5k" />
       </bpmn:lane>
     </bpmn:laneSet>
@@ -31,10 +30,6 @@
       <bpmn:incoming>Flow_1r9zwk8</bpmn:incoming>
       <bpmn:outgoing>Flow_08wqvmu</bpmn:outgoing>
     </bpmn:userTask>
-    <bpmn:serviceTask id="service-task_set_sp-access" name="Berechtigungen auf SharePoint anpassen" camunda:type="external" camunda:topic="SetSPRights">
-      <bpmn:incoming>Flow_0gpc1e5</bpmn:incoming>
-      <bpmn:outgoing>Flow_11jkyjo</bpmn:outgoing>
-    </bpmn:serviceTask>
     <bpmn:serviceTask id="service-task_new_user" name="Benutzer erstellung" camunda:type="external" camunda:topic="SetStartUserCreation">
       <bpmn:incoming>Flow_1ksfuoy</bpmn:incoming>
       <bpmn:outgoing>Flow_0gpc1e5</bpmn:outgoing>
@@ -43,13 +38,9 @@
       <bpmn:outgoing>Flow_1nfsvci</bpmn:outgoing>
       <bpmn:signalEventDefinition id="SignalEventDefinition_0zmgtsl" signalRef="Signal_3e4kooa" />
     </bpmn:startEvent>
-    <bpmn:userTask id="capture_userdata" name="Benutzerdaten erfassen">
-      <bpmn:incoming>Flow_1nfsvci</bpmn:incoming>
-      <bpmn:outgoing>Flow_01bj9fs</bpmn:outgoing>
-    </bpmn:userTask>
     <bpmn:intermediateThrowEvent id="signal_trow_autorisation_request" name="Genehmigungsanfrage versenden">
       <bpmn:extensionElements />
-      <bpmn:incoming>Flow_01bj9fs</bpmn:incoming>
+      <bpmn:incoming>Flow_1nfsvci</bpmn:incoming>
       <bpmn:outgoing>Flow_05gabia</bpmn:outgoing>
       <bpmn:signalEventDefinition id="SignalEventDefinition_0rt6gya" signalRef="Signal_3em53uc">
         <bpmn:extensionElements>
@@ -73,13 +64,16 @@
     <bpmn:sequenceFlow id="Flow_1ksfuoy" sourceRef="signal_catch_approve_request" targetRef="service-task_new_user" />
     <bpmn:sequenceFlow id="Flow_0gpc1e5" sourceRef="service-task_new_user" targetRef="service-task_set_sp-access" />
     <bpmn:sequenceFlow id="Flow_05gabia" sourceRef="signal_trow_autorisation_request" targetRef="signal_catch_approve_request" />
-    <bpmn:sequenceFlow id="Flow_1nfsvci" sourceRef="signal_catch_start_new_user" targetRef="capture_userdata" />
-    <bpmn:sequenceFlow id="Flow_01bj9fs" sourceRef="capture_userdata" targetRef="signal_trow_autorisation_request" />
+    <bpmn:sequenceFlow id="Flow_1nfsvci" sourceRef="signal_catch_start_new_user" targetRef="signal_trow_autorisation_request" />
     <bpmn:intermediateCatchEvent id="signal_catch_approve_request" name="Genehmigung  erhalten">
       <bpmn:incoming>Flow_05gabia</bpmn:incoming>
       <bpmn:outgoing>Flow_1ksfuoy</bpmn:outgoing>
       <bpmn:signalEventDefinition id="SignalEventDefinition_0hgkdyy" signalRef="Signal_25t6doe" />
     </bpmn:intermediateCatchEvent>
+    <bpmn:serviceTask id="service-task_set_sp-access" name="Berechtigungen auf SharePoint anpassen" camunda:type="external" camunda:topic="SetSPRights">
+      <bpmn:incoming>Flow_0gpc1e5</bpmn:incoming>
+      <bpmn:outgoing>Flow_11jkyjo</bpmn:outgoing>
+    </bpmn:serviceTask>
   </bpmn:process>
   <bpmn:process id="personaleintrittsprozess_gl" name="Personaleintrittsprozess GL" isExecutable="true" camunda:historyTimeToLive="180">
     <bpmn:intermediateCatchEvent id="gl_whait_firstday" name="Warten bis erster Arbeitstag">
@@ -196,9 +190,6 @@
       <bpmndi:BPMNShape id="Activity_127lvix_di" bpmnElement="task_employee_onboarding">
         <dc:Bounds x="1690" y="175" width="100" height="80" />
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Activity_12w0owx_di" bpmnElement="service-task_set_sp-access">
-        <dc:Bounds x="1240" y="175" width="100" height="80" />
-      </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Activity_0eajvm5_di" bpmnElement="service-task_new_user">
         <dc:Bounds x="970" y="175" width="100" height="80" />
       </bpmndi:BPMNShape>
@@ -207,9 +198,6 @@
         <bpmndi:BPMNLabel>
           <dc:Bounds x="267" y="153" width="90" height="27" />
         </bpmndi:BPMNLabel>
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Activity_02pyjm4_di" bpmnElement="capture_userdata">
-        <dc:Bounds x="370" y="175" width="100" height="80" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Event_0h9tfeo_di" bpmnElement="signal_trow_autorisation_request">
         <dc:Bounds x="532" y="197" width="36" height="36" />
@@ -235,8 +223,11 @@
           <dc:Bounds x="784" y="167" width="73" height="27" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_12w0owx_di" bpmnElement="service-task_set_sp-access">
+        <dc:Bounds x="1230" y="175" width="100" height="80" />
+      </bpmndi:BPMNShape>
       <bpmndi:BPMNEdge id="Flow_11jkyjo_di" bpmnElement="Flow_11jkyjo">
-        <di:waypoint x="1340" y="215" />
+        <di:waypoint x="1330" y="215" />
         <di:waypoint x="1482" y="215" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_0z4ofn3_di" bpmnElement="Flow_0z4ofn3">
@@ -257,7 +248,7 @@
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_0gpc1e5_di" bpmnElement="Flow_0gpc1e5">
         <di:waypoint x="1070" y="215" />
-        <di:waypoint x="1240" y="215" />
+        <di:waypoint x="1230" y="215" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_05gabia_di" bpmnElement="Flow_05gabia">
         <di:waypoint x="568" y="215" />
@@ -265,10 +256,6 @@
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_1nfsvci_di" bpmnElement="Flow_1nfsvci">
         <di:waypoint x="328" y="215" />
-        <di:waypoint x="370" y="215" />
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_01bj9fs_di" bpmnElement="Flow_01bj9fs">
-        <di:waypoint x="470" y="215" />
         <di:waypoint x="532" y="215" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNShape id="Participant_1imz5xo_di" bpmnElement="Participant_1imz5xo" isHorizontal="true">

@@ -3,18 +3,22 @@
 #*******************************************************************#
 
 # Camunda External Task Handler
-# Erforderliche Parameter
+# Required parameters
 
 $CamundaEndpoint = "http://localhost:8080/engine-rest" # Camunda REST API URL
 $WorkerId = "powershell-worker"                        # Worker-ID
-$TopicName = "SetStartUserCreation"                     # Topic-Name für den externen Task
-$MaxTasks = 1                                          # Maximale Anzahl von Tasks
-$LockDuration = 10000                                  # Lockdauer in Millisekunden
+$TopicName = "SetStartUserCreation"                     # Topic name for the external task
+$MaxTasks = 1                                          # Maximum number of tasks
+$LockDuration = 10000                                  # Lock duration in milliseconds
 $FetchAndLockEndpoint = "$CamundaEndpoint/external-task/fetchAndLock"
 $CompleteTaskEndpoint = "$CamundaEndpoint/external-task"
+$Demo = $true
+$DemoInterval = 15 #Demo-Interval in Seconds
+$Interval = if ($Demo) { $DemoInterval } else { 60 } # Interval evaluation in seconds
 
-
-#Functions
+#############
+# Functions #
+#############
 
 # Logfunction for troubleshoot
 function Write-Log {
@@ -32,7 +36,7 @@ function Write-Log {
     }  
 }
 
-# Funktion: Camunda Fetch and Lock
+# Function: Camunda Fetch and Lock
 function Camunda-FetchAndLock-Task {
     Write-Log -Message "Starte FetchAndLock von Tasks..." -LogStatus "Info"
     $payload = @{
@@ -51,11 +55,15 @@ function Camunda-FetchAndLock-Task {
     return $response
 }
 
-# Funktion: Task abschliessen
+# Function: Task abschliessen
 function Complete-Task {
-    param ([string]$TaskId, [hashtable]$Variables)
+    param (
+        [string]$TaskId,
+        [hashtable]$Variables
+    
+    )
 
-    Write-Log -Message "Schließe Task ID: $TaskId ab..." -LogStatus "Info"
+    Write-Log -Message "Schliesse Task ID: $TaskId ab..." -LogStatus "Info"
     $payload = @{
         workerId = $WorkerId
         variables = $Variables
@@ -66,6 +74,7 @@ function Complete-Task {
     return $response
 }
 
+# Function: Import Login
 function Import-Login {
     Write-Log -Message "Importiere Login-Informationen..." -LogStatus "Info"
 
@@ -90,6 +99,7 @@ function Import-Login {
     return $Logininfos
 }
 
+# Function: Establishing a connection with Microsoft Graph
 function Connect-MSG {
     param (
         [string]$Tenant = $null,
@@ -100,11 +110,16 @@ function Connect-MSG {
 
     Write-Log -Message "Verbindung mit Microsoft Graph wird hergestellt..." -LogStatus "Info"
 
-
-    Connect-MgGraph -ClientId $ClientID -CertificateThumbprint $Thumbprint -TenantId $TenantID -NoWelcome
-
+    try {
+        Connect-MgGraph -ClientId $ClientID -CertificateThumbprint $Thumbprint -TenantId $TenantID -NoWelcome -ErrorAction Stop
+        Write-Log -Message "Verbindung mit Microsoft Graph erfolgreich" -LogStatus "success"
+    }
+    catch {
+        Write-Log -Message "Verbindung mit Microsoft Graph fehlgeschlagen" -LogStatus "Error"
+    }
 }
 
+# Function: Generate Password
 function Generate-Password {
     param (
         [int]$length = 1
@@ -147,6 +162,7 @@ function Generate-Password {
     return $passwords
 }
 
+# Function: New Password
 function New-Password {
     param(
         [int]$length = 1,
@@ -168,6 +184,7 @@ function New-Password {
     return $passwords
 }
 
+# Function: Check UPN
 function Check-UPN {
     param (
         [string]$Name = $null,
@@ -178,64 +195,139 @@ function Check-UPN {
     Write-Log -Message "Prüfe UPN..." -LogStatus "Info"
     if ($Name -eq $null -or $Surname -eq $null) {
         Write-Log -Message "Fehler: Name oder Nachname fehlt." -LogStatus "Error"
-        $fehler = "fehler"
-        return $fehler
+        return "fehler"
     }
 
-    $counter = 1
+    $counter = 0
     $upnFound = $false
 
     do {
-        $UPN = "$Name.$Surname$counter@$domain"
+        if ($counter -eq 0) {
+            # Basic UPN without counter
+            $UPN = "$Name.$Surname@$Domain"
+        } else {
+            # UPN with counter
+            $UPN = "$Name.$Surname$counter@$Domain"
+        }
 
         try {
+            # Check whether the UPN already exists
             Get-MgUser -UserId $UPN -ErrorAction Stop
             $counter++
         }
         catch {
+            # UPN is available
             $upnFound = $true
         }
     } until ($upnFound)
 
     Write-Log -Message "UPN gefunden: $UPN" -LogStatus "Success"
+
+    # Get the last UPN entry (UPN ist free to use)
+    $CountOfUPNEntries = $UPN | Measure-Object
+    $LastUPNEntry = $CountOfUPNEntries.Count - 1
+
     return $UPN
 }
 
+
+# Function: Create New User with MG Graph
 function Create-NewUser {
     param (
         $UserProps = $null,
-        [string]$Name = $UserProps.Name,
-        [string]$Surname = $UserProps.Surname,
-        [string]$DisplayName = $UserProps.DisplayName,
+        $AccountEnabled = $true,
+        [string]$Name = $UserProps.firstname.value,
+        [string]$Surname = $UserProps.Surname.value,
+        [string]$DisplayName = $Surname + ", " + $Name,
         [string]$Domain = "iseschool2013.onmicrosoft.com",
-        [string]$Department = $UserProps.Department, #Abteilung
-        [string]$Office = $UserProps.Office, #Bürostandort
-        [string]$JobTitle = $UserProps.JobTitle, #Position
-        [string]$UsageLocation = "Switzerland",
-        [bool]$AccountEnabled = $true
+        [string]$Office = $UserProps.Office.value, # Abteilung
+        [string]$DepartmentTeam = $UserProps.Department_Team.value, # Bürostandort_Team
+        [string]$DepartmentStud = $UserProps.Department_Stud.value, # Bürostandort_Stud
+        [string]$JobTitle = $UserProps.position.value, # Position
+        [string]$UsageLocation = "CH",
+        [string]$Manager = $UserProps.Manager.value
     )
 
     Write-Log -Message "Erstelle neuen Benutzer..." -LogStatus "Info"
     $UPN = Check-UPN -Name $Name -Surname $Surname -Domain $Domain
 
+    # Get the last UPN entry (UPN ist free to use)
+    $CountOfUPNEntries = $UPN | Measure-Object
+    $LastUPNEntry = $CountOfUPNEntries.Count - 1
+    $UPN = $UPN[$LastUPNEntry]
+    $MailNickname = $UPN.split("@")[0]
+
     $password = New-Password
 
     $SecurePassword = ConvertTo-SecureString $password -AsPlainText -Force
 
-    New-MgUser `
-        -UserPrincipalName $UPN `
-        -GivenName $Name `
-        -Surname $Surname `
-        -DisplayName $DisplayName `
-        -Mail $UPN `
-        -Department $Department `
-        -OfficeLocation $Office `
-        -JobTitle $JobTitle `
-        -UsageLocation $UsageLocation `
-        -AccountEnabled $AccountEnabled `
-        -PasswordProfile @{Password = $SecurePassword}
+    Write-Log -Message "Evaluiere Department" -LogStatus "Info"
+    $Department = `
+        switch ($DepartmentTeam) {
+            "dev_application" { "Application development" }
+            "m365_application" { "Application M365" }
+            "eng_sys" { "Systemengineer" }
+            "sup_sys" { "Systemengineer Support" }
+            "stud" { switch ($DepartmentStud) {
+                "application" { "Stud Application development" }
+                "system" { "Stud Systemengineer / Support" }
+                Default {""}
+            } }
+            Default {}
+        }
+        
+    New-MgUser -UserPrincipalName $UPN -GivenName $Name -Surname $Surname -DisplayName $DisplayName -Mail $UPN -MailNickname $MailNickname -AccountEnabled -Department $Department -OfficeLocation $Office -JobTitle $JobTitle -UsageLocation $UsageLocation -PasswordProfile @{Password = $SecurePassword}
 
     Write-Log -Message "Benutzer $DisplayName mit UPN $UPN erfolgreich erstellt." -LogStatus "Success"
+
+    return [PSCustomObject]@{
+        UPN      = $UPN
+        Password = $password
+    }
+}
+
+# Function: Set Manager
+function Set-Manager {
+    param (
+        [parameter (Mandatory = $true)]
+        $UserProps = $null,
+        [string]$Manager = $UserProps.Manager.value,
+        [string]$UserId = $null
+    )
+
+    Write-Log -Message "Setze Manager..." -LogStatus "Info"
+
+    Write-Log -Message "Evaluiere Manager" -LogStatus "Info"
+
+    # Evaluate Manager
+    $ManagerUPN = `
+        switch ($Manager) {
+            "rb" {"miguel.schneider@iseschool2013.onmicrosoft.com"}
+            "dz" {"miguel.schneider@iseschool2013.onmicrosoft.com"}
+            "fe" {"miguel.schneider@iseschool2013.onmicrosoft.com"}
+            "dzw" {"miguel.schneider@iseschool2013.onmicrosoft.com"} 
+            Default {}
+        }
+    
+    # Retrieve manager
+    try {
+        $ManagerObject = Get-MgUser -Filter "UserPrincipalName eq '$ManagerUPN'" -ErrorAction Stop
+        Write-Log -Message "Manager gefunden" -LogStatus "Info"
+    }
+    catch {
+        Write-Log -Message "Manager nicht gefunden" -LogStatus "Error"
+    }
+    
+
+    # Set manager attribute for the user
+    try{
+        Set-MgUserManager -UserId $UserId -ManagerId $ManagerObject.Id
+        Write-Log -Message "Manager erfolgreich gesetzt" -LogStatus "Success"
+    }
+    catch {
+        Write-Log -Message "Manager konnte nicht gesetzt werden" -LogStatus "Error"
+    }
+        
 }
 
 while ($true) {
@@ -243,7 +335,7 @@ while ($true) {
         $Tasks = Camunda-FetchAndLock-Task
         if ($Tasks.Count -eq 0) {
             Write-Log -Message "Keine Tasks gefunden. Warte..." -LogStatus "Info"
-            Start-Sleep -Seconds 5
+            Start-Sleep -Seconds $Interval
             continue
         }
 
@@ -255,7 +347,7 @@ while ($true) {
             
             #*****************************************************************************************************************************************************
             #-----------------------------------------------------------------------------------------------------------------------------------------------------
-            # Taskpart, welcher ausgeführt wird pro Instanz                                                                                                      ¦
+            # Task part that is executed per instance                                                                                                            ¦
             #-----------------------------------------------------------------------------------------------------------------------------------------------------
 
             # Get UserProps of Camunda Form
@@ -275,17 +367,44 @@ while ($true) {
             # Connection
             Connect-MSG -Tenant $Tenant -ClientID $ClientID -Thumbprint $Thumbprint -TenantID $TenantId
 
+            # Creation New User
+            $result = Create-NewUser -UserProps $UserProps
+            
+            # Return Variables
+            $UPN = $result.UPN
+            $password = $result.Password
 
-            # # Creation New User
-            # Create-NewUser -UserProps $UserProps
+            # Whait for the User to be created
+            Write-Log -Message "Warte 5 Minuten..." -LogStatus "Info"
+            Start-Sleep -Seconds 10
+
+            # Get User ID
+            $CreatedUser = Get-MgUser -UserId $UPN
+            $UserId = $CreatedUser.Id
+
+            # Add User to M365-Licence-Group
+            New-MgGroupMember -groupID "e430d7e5-79da-4008-8c35-b753ace1d2dc" -DirectoryObjectId $UserId # Group: misch-sem2arbeit-M365-Licence
+
+            # Set Manager
+            Set-Manager -UserProps $UserProps -UserId $UserId
+
+
 
             #****************************************************************************************************************************************************
 
-            # Variablen für den Abschluss des Tasks
+            # Variables for the completion of the task
             $outputVariables = @{
-                result = @{
-                    value = $result
-                    type = "Integer"
+                upn = @{
+                    value = $UPN
+                    type = "String"
+                }
+                userId = @{
+                    value = $UserId
+                    type = "String"
+                }
+                password = @{
+                    value = $password
+                    type = "String"
                 }
             }
 
@@ -294,6 +413,6 @@ while ($true) {
         }
     } catch {
         Write-Log -Message "Fehler: $_" -LogStatus "Error"
-        Start-Sleep -Seconds 5
+        Start-Sleep -Seconds $Interval
     }
 }

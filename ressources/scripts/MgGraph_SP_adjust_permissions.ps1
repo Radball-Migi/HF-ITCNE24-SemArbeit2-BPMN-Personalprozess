@@ -2,20 +2,21 @@
 # Script to adjust the Accessrights in SharePoint for the User      #
 #*******************************************************************#
 
-#*******************************************************************#
-# Script to Create a User with the Variables of the Camunda Form    #
-#*******************************************************************#
+
 
 # Camunda External Task Handler
-# Erforderliche Parameter
+# Required parameters
 
 $CamundaEndpoint = "http://localhost:8080/engine-rest" # Camunda REST API URL
 $WorkerId = "powershell-worker"                        # Worker-ID
-$TopicName = "SetSPRights"                             # Topic-Name für den externen Task
-$MaxTasks = 1                                          # Maximale Anzahl von Tasks
-$LockDuration = 10000                                  # Lockdauer in Millisekunden
+$TopicName = "SetSPRights"                             # Topic name for the external task
+$MaxTasks = 1                                          # Maximum number of tasks
+$LockDuration = 10000                                  # Lock duration in milliseconds
 $FetchAndLockEndpoint = "$CamundaEndpoint/external-task/fetchAndLock"
 $CompleteTaskEndpoint = "$CamundaEndpoint/external-task"
+$Demo = $true
+$DemoInterval = 15 #Demo-Interval in Seconds
+$Interval = if ($Demo) { $DemoInterval } else { 60 } # Interval evaluation in seconds
 
 
 #Functions
@@ -109,12 +110,60 @@ function Connect-MSG {
 
 }
 
+function Set-SPRights {
+    param (
+        [string]$Roles = $null,
+        [string]$UserId = $null
+    )
+
+    #SharePoint-Groups
+    $SP_Admin = "e8dbd8f4-8dca-4b56-b7b0-de6fe71120d4"
+    $SP_VR = "2cc0f395-da9f-419b-b61f-85d0bde45a31"
+    $SP_GL = "b1e1236f-6044-4ae2-b2bc-e94fd463c555"
+    $SP_Lernende = "2d274883-44a9-4081-a1a7-2896ff5f4149"
+    $SP_MA = "436d4133-b34a-47a2-8ccf-243655015244"
+    $SP_SP = "8f14f1cf-6231-4c9d-a47a-f85a2b59392e"
+    $SP_SB = "c050fb50-9ed2-4b18-bdc3-1d6d1425a65c"
+
+    
+
+    foreach ($Role in $Roles) {
+        
+        switch ($Role) {
+            "vr" { 
+                New-MgGroupMember -groupID $SP_VR -DirectoryObjectId $UserId #Group: misch-sem2arbeit-SP-VR
+            }
+
+            "gl" { 
+                New-MgGroupMember -groupID $SP_Admin -DirectoryObjectId $UserId #Group: misch-sem2arbeit-SP-Admin
+                New-MgGroupMember -groupID $SP_GL -DirectoryObjectId $UserId #Group: misch-sem2arbeit-SP-GL
+            }
+
+            "stud"{
+                New-MgGroupMember -groupID $SP_Lernende -DirectoryObjectId $UserId #Group: misch-sem2arbeit-SP-Lehrnende
+            }
+            "ma" {
+                New-MgGroupMember -groupID $SP_MA -DirectoryObjectId $UserId #Group: misch-sem2arbeit-SP-MA
+            }
+            "sp" {
+                New-MgGroupMember -groupID $SP_SP -DirectoryObjectId $UserId #Group: misch-sem2arbeit-SP-Schluesselpersonen
+            }
+            "sb" {
+                New-MgGroupMember -groupID $SP_SB -DirectoryObjectId $UserId #Group: misch-sem2arbeit-SP-Sachbearbeitung
+            }
+            Default {}
+        }
+
+    }
+    
+}
+
 while ($true) {
     try {
         $Tasks = Camunda-FetchAndLock-Task
         if ($Tasks.Count -eq 0) {
             Write-Log -Message "Keine Tasks gefunden. Warte..." -LogStatus "Info"
-            Start-Sleep -Seconds 5
+            Start-Sleep -Seconds $Interval
             continue
         }
 
@@ -126,7 +175,7 @@ while ($true) {
             
             #*****************************************************************************************************************************************************
             #-----------------------------------------------------------------------------------------------------------------------------------------------------
-            # Taskpart, welcher ausgeführt wird pro Instanz                                                                                                      ¦
+            # Task part that is executed per instance                                                                                                      ¦
             #-----------------------------------------------------------------------------------------------------------------------------------------------------
 
             # Get UserProps of Camunda Form
@@ -146,24 +195,22 @@ while ($true) {
             # Connection
             Connect-MSG -Tenant $Tenant -ClientID $ClientID -Thumbprint $Thumbprint -TenantID $TenantId
 
-            
+            Set-SPRights -Roles $UserProps.roles.value -UserId $UserProps.userId.value
+
+
+
             
 
             #****************************************************************************************************************************************************
 
-            # Variablen für den Abschluss des Tasks
-            $outputVariables = @{
-                result = @{
-                    value = $result
-                    type = "Integer"
-                }
-            }
+            # Variables for the completion of the task
+            $outputVariables = @{}
 
             Complete-Task -TaskId $taskId -Variables $outputVariables
             Write-Log -Message "Task ID: $taskId abgeschlossen." -LogStatus "Info"
         }
     } catch {
         Write-Log -Message "Fehler: $_" -LogStatus "Error"
-        Start-Sleep -Seconds 5
+        Start-Sleep -Seconds $Interval
     }
 }

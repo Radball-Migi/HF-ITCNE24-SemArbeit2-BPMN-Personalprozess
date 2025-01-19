@@ -10,7 +10,7 @@
             margin: 20px;
             background-color: #f4f4f9;
             color: #333;
-            position: relative; /* Ermöglicht absolutes Positionieren */
+            position: relative;
         }
         .top-left {
             position: absolute;
@@ -20,8 +20,8 @@
             height: 106px;
             background-image: url('https://www.iseag.ch/wp-content/uploads/logo_iseag_transparent_400.png');
             background-size: cover;
-            background-position: center; /* Zentriert das Bild innerhalb des Kreises */
-            background-repeat: no-repeat; /* Verhindert Wiederholung des Bildes */
+            background-position: center;
+            background-repeat: no-repeat;
         }
         .top-right {
             position: absolute;
@@ -31,8 +31,8 @@
             height: 150px;
             background-image: url('https://gdm-catalog-fmapi-prod.imgix.net/ProductLogo/91be7721-d1db-4f29-ab5f-94c4ed5b5308.png?w=128&h=128&fit=max&dpr=3&auto=format&q=50');
             background-size: cover;
-            background-position: center; /* Zentriert das Bild innerhalb des Kreises */
-            background-repeat: no-repeat; /* Verhindert Wiederholung des Bildes */
+            background-position: center;
+            background-repeat: no-repeat;
         }
         form {
             max-width: 600px;
@@ -79,8 +79,8 @@
             cursor: pointer;
         }
         .button-right {
-            float: right; /* Verschiebt den Button nach rechts */
-            margin-left: 10px; /* Optional: Abstand zwischen Buttons */
+            float: right;
+            margin-left: 10px;
         }
         button[type="button"] {
             background-color: #B1005D;
@@ -96,19 +96,27 @@
         button[type="reset"]:hover {
             background-color: #c9302c;
         }
-        #roles-options div, #manager-options div, #activate-options div {
+        #roles-options div, #manager-options div {
             display: flex;
             align-items: center;
             margin-bottom: 5px;
         }
-        #roles-options label, #manager-options label, #activate-options label {
+        #roles-options label, #manager-options label {
             font-weight: normal;
             margin: 0;
         }
-        #roles-options, #manager-options, #activate-options {
+        #roles-options, #manager-options {
             display: flex;
             flex-direction: column;
             align-items: flex-start;
+        }
+        .hint {
+            font-size: 0.9em; /* Verkleinert die Schriftgröße */
+            color: #666; /* Verwendet eine dezentere Farbe */
+            margin-top: -10px; /* Optional: Reduziert den Abstand nach oben */
+            margin-bottom: 15px; /* Optional: Abstand nach unten */
+            line-height: 1.4; /* Verbessert die Lesbarkeit */
+            font-style: italic; /* Optional: Macht den Text kursiv */
         }
     </style>
 </head>
@@ -126,16 +134,26 @@
             <input type="text" id="surname" name="surname" required>
         </div>
         <div class="form-group">
-            <label for="teln">Telefonnummer</label>
-            <input type="text" id="teln" name="teln" placeholder="Geschäftsnummer">
+            <label for="telnr">Telefonnummer</label>
+            <input type="text" id="telnr" name="telnr" placeholder="Geschäftsnummer">
         </div>
         <div class="form-group">
             <label for="mobilenr">Mobilenummer</label>
             <input type="text" id="mobilenr" name="mobilenr">
         </div>
         <div class="form-group">
-            <label for="office_team">Abteilung, Team</label>
-            <select id="office_team" name="office_team" onchange="toggleOfficeStud()">
+            <label for="office">Bürostandort</label>
+            <select id="office" name="office">
+                <option value="" disabled selected>Bitte wählen...</option>
+                <option value="Einsiedeln">Einsiedeln</option>
+                <option value="SRZA">SRZA</option>
+                <option value="Bern">Bern</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="department_team">Abteilung, Team</label>
+            <select id="department_team" name="department_team" onchange="toggleOfficeStud()">
+                <option value="" disabled selected>Bitte wählen...</option>
                 <option value="dev_application">Applikation (Entwicklung)</option>
                 <option value="m365_application">Applikation (M365)</option>
                 <option value="eng_sys">Systemtechnik</option>
@@ -143,9 +161,10 @@
                 <option value="stud">Lehrling</option>
             </select>
         </div>
-        <div class="form-group" id="office_stud_group" style="display: none;">
-            <label for="office_stud">Abteilung Lernende</label>
-            <select id="office_stud" name="office_stud">
+        <div class="form-group" id="department_stud_group" style="display: none;">
+            <label for="department_stud">Abteilung Lernende</label>
+            <select id="department_stud" name="department_stud">
+                <option value="" disabled selected>Bitte wählen...</option>
                 <option value="application">Applikation</option>
                 <option value="system">Systemtechnik</option>
             </select>
@@ -170,11 +189,11 @@
                     <label for="role_gl">Geschäftsleitung</label>
                 </div>
                 <div>
-                    <input type="checkbox" id="role_stud" name="roles" value="stud">
+                    <input type="checkbox" id="role_stud" name="roles" value="ma">
                     <label for="role_stud">Mitarbeiter</label>
                 </div>
                 <div>
-                    <input type="checkbox" id="role_ma" name="roles" value="ma">
+                    <input type="checkbox" id="role_ma" name="roles" value="stud">
                     <label for="role_ma">Lehrling</label>
                 </div>
                 <div>
@@ -208,28 +227,21 @@
                 </div>
             </div>
         </div>
+        <div class="form-group"><br></div>
         <div class="form-group">
-            <label for="activate_account">Account Aktivieren</label>
-            <div id="activate-options"> 
-                <div>
-                    <label for="activate">Aktivieren?</label>
-                    <input type="checkbox" id="activate" name="activate_account" checked>  
-                </div>
-            </div>   
-        </div>        
+            <p class="hint">Sobald das Formular abgesendet wird, wird es der GL zugesendet, für die Überprüfung. Genaueres ist auf dem <a href="http://localhost:8080" target="_blank">Server</a> ersichtlich.</p>
+        </div>
         <button type="reset">Zurücksetzen</button>
         <button type="button" onclick="submitForm()" class="button-right">Absenden</button>
     </form>
 
     <script>
-        // Restrict entrydate to future dates
         const today = new Date().toISOString().split('T')[0];
         document.getElementById('entrydate').setAttribute('min', today);
 
-        // Toggle visibility of office_stud
         function toggleOfficeStud() {
-            const officeTeam = document.getElementById('office_team').value;
-            const officeStudGroup = document.getElementById('office_stud_group');
+            const officeTeam = document.getElementById('department_team').value;
+            const officeStudGroup = document.getElementById('department_stud_group');
 
             if (officeTeam === 'stud') {
                 officeStudGroup.style.display = 'block';
@@ -243,34 +255,29 @@
             const formData = new FormData(form);
             const variables = {};
 
-            // Initialize roles and manager as empty arrays
             const roles = [];
             const manager = [];
 
-            // Process form data
             for (const [key, value] of formData.entries()) {
                 if (key === 'roles') {
-                    roles.push(value); // Collect all selected roles
+                    roles.push(value);
                 } else if (key === 'manager') {
-                    manager.push(value); // Collect selected manager (only one should exist)
-                } else if (key === 'activate_account') {
-                    variables[key] = { type: 'Boolean', value: document.getElementById('activate').checked };
+                    manager.push(value);
                 } else {
                     variables[key] = { type: 'String', value: value };
                 }
             }
 
-            // Add roles and manager to variables if they have values
             if (roles.length > 0) {
                 variables['roles'] = { type: 'Json', value: JSON.stringify(roles) };
             }
 
             if (manager.length > 0) {
-                variables['manager'] = { type: 'String', value: manager[0] }; // Only one manager should be selected
+                variables['manager'] = { type: 'String', value: manager[0] };
             }
 
             const payload = {
-                name: "Start_new_employee", // Signal name
+                name: "Start_new_employee",
                 variables: variables,
             };
 
