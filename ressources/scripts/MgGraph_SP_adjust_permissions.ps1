@@ -15,11 +15,11 @@ $LockDuration = 10000                                  # Lock duration in millis
 $FetchAndLockEndpoint = "$CamundaEndpoint/external-task/fetchAndLock"
 $CompleteTaskEndpoint = "$CamundaEndpoint/external-task"
 $Demo = $true
-$DemoInterval = 15 #Demo-Interval in Seconds
+$DemoInterval = 15 # Demo-Interval in Seconds
 $Interval = if ($Demo) { $DemoInterval } else { 60 } # Interval evaluation in seconds
 
 
-#Functions
+# Functions
 
 # Logfunction for troubleshoot
 function Write-Log {
@@ -112,11 +112,11 @@ function Connect-MSG {
 
 function Set-SPRights {
     param (
-        [string]$Roles = $null,
+        [array]$Roles = $null,
         [string]$UserId = $null
     )
 
-    #SharePoint-Groups
+    # SharePoint-Groups
     $SP_Admin = "e8dbd8f4-8dca-4b56-b7b0-de6fe71120d4"
     $SP_VR = "2cc0f395-da9f-419b-b61f-85d0bde45a31"
     $SP_GL = "b1e1236f-6044-4ae2-b2bc-e94fd463c555"
@@ -124,38 +124,87 @@ function Set-SPRights {
     $SP_MA = "436d4133-b34a-47a2-8ccf-243655015244"
     $SP_SP = "8f14f1cf-6231-4c9d-a47a-f85a2b59392e"
     $SP_SB = "c050fb50-9ed2-4b18-bdc3-1d6d1425a65c"
-
     
-
+    # Set Rights foreach Role
     foreach ($Role in $Roles) {
         
+        Write-Log -Message "Setze Rechte für Rolle: $Role" -LogStatus "Info"
+
         switch ($Role) {
             "vr" { 
-                New-MgGroupMember -groupID $SP_VR -DirectoryObjectId $UserId #Group: misch-sem2arbeit-SP-VR
+                try {
+                    New-MgGroupMember -groupID $SP_VR -DirectoryObjectId $UserId -ErrorAction Stop # Group: misch-sem2arbeit-SP-VR
+                    Write-Log -Message "Rechte für vr gesetzt." -LogStatus "Success"
+                } catch {
+                    Write-Log -Message "Error beim Setzen der Rechte für vr." -LogStatus "Error"
+                }
             }
-
+        
             "gl" { 
-                New-MgGroupMember -groupID $SP_Admin -DirectoryObjectId $UserId #Group: misch-sem2arbeit-SP-Admin
-                New-MgGroupMember -groupID $SP_GL -DirectoryObjectId $UserId #Group: misch-sem2arbeit-SP-GL
+                try {
+                    New-MgGroupMember -groupID $SP_Admin -DirectoryObjectId $UserId -ErrorAction Stop # Group: misch-sem2arbeit-SP-Admin
+                    New-MgGroupMember -groupID $SP_GL -DirectoryObjectId $UserId -ErrorAction Stop # Group: misch-sem2arbeit-SP-GL
+                    Write-Log -Message "Rechte für gl gesetzt." -LogStatus "Success"
+                } catch {
+                    Write-Log -Message "Error beim Setzen der Rechte für gl." -LogStatus "Error"
+                }
             }
-
-            "stud"{
-                New-MgGroupMember -groupID $SP_Lernende -DirectoryObjectId $UserId #Group: misch-sem2arbeit-SP-Lehrnende
+        
+            "stud" {
+                try {
+                    New-MgGroupMember -groupID $SP_Lernende -DirectoryObjectId $UserId -ErrorAction Stop # Group: misch-sem2arbeit-SP-Lernende
+                    Write-Log -Message "Rechte für stud gesetzt." -LogStatus "Success"
+                } catch {
+                    Write-Log -Message "Error beim Setzen der Rechte für stud." -LogStatus "Error"
+                }
             }
+        
             "ma" {
-                New-MgGroupMember -groupID $SP_MA -DirectoryObjectId $UserId #Group: misch-sem2arbeit-SP-MA
+                try {
+                    New-MgGroupMember -groupID $SP_MA -DirectoryObjectId $UserId -ErrorAction Stop # Group: misch-sem2arbeit-SP-MA
+                    Write-Log -Message "Rechte für ma gesetzt." -LogStatus "Success"
+                } catch {
+                    Write-Log -Message "Error beim Setzen der Rechte für ma." -LogStatus "Error"
+                }
             }
+        
             "sp" {
-                New-MgGroupMember -groupID $SP_SP -DirectoryObjectId $UserId #Group: misch-sem2arbeit-SP-Schluesselpersonen
+                try {
+                    New-MgGroupMember -groupID $SP_SP -DirectoryObjectId $UserId -ErrorAction Stop # Group: misch-sem2arbeit-SP-Schluesselpersonen
+                    Write-Log -Message "Rechte für sp gesetzt." -LogStatus "Success"
+                } catch {
+                    Write-Log -Message "Error beim Setzen der Rechte für sp." -LogStatus "Error"
+                }
             }
+        
             "sb" {
-                New-MgGroupMember -groupID $SP_SB -DirectoryObjectId $UserId #Group: misch-sem2arbeit-SP-Sachbearbeitung
+                try {
+                    New-MgGroupMember -groupID $SP_SB -DirectoryObjectId $UserId -ErrorAction Stop # Group: misch-sem2arbeit-SP-Sachbearbeitung
+                    Write-Log -Message "Rechte für sb gesetzt." -LogStatus "Success"
+                } catch {
+                    Write-Log -Message "Error beim Setzen der Rechte für sb." -LogStatus "Error"
+                }
             }
-            Default {}
-        }
+        
+            Default {
 
+                Write-Log -Message "Unbekannte Rolle: $Role" -LogStatus "Error"
+            }
+        }
     }
     
+}
+
+# Function to convert Camunda Roles
+function Convert-CamundaRoles {
+    param (
+        [string]$RawRoles = $null
+    )
+    
+    # Remove the square brackets and create a PowerShell array
+    $ConvertedRoles = @($RawRoles -replace '\[|\]', '' -replace '"', '' -split ',')
+    
+    return $ConvertedRoles
 }
 
 while ($true) {
@@ -195,7 +244,11 @@ while ($true) {
             # Connection
             Connect-MSG -Tenant $Tenant -ClientID $ClientID -Thumbprint $Thumbprint -TenantID $TenantId
 
-            Set-SPRights -Roles $UserProps.roles.value -UserId $UserProps.userId.value
+            # Convert Roles from Camunda
+            $Roles = Convert-CamundaRoles -RawRoles $UserProps.roles.value
+            
+            # Set Rights
+            Set-SPRights -Roles $Roles -UserId $UserProps.userId.value
 
 
 

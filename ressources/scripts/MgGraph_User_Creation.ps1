@@ -253,8 +253,18 @@ function Create-NewUser {
 
     # Get the last UPN entry (UPN ist free to use)
     $CountOfUPNEntries = $UPN | Measure-Object
-    $LastUPNEntry = $CountOfUPNEntries.Count - 1
-    $UPN = $UPN[$LastUPNEntry]
+    
+    $UPN = `
+        if ($CountOfUPNEntries.Count -eq 1) {
+
+            $UPN
+
+        }else {
+            $LastUPNEntry = $CountOfUPNEntries.Count - 1
+            $UPN[$LastUPNEntry]
+            
+        }
+    
     $MailNickname = $UPN.split("@")[0]
 
     $password = New-Password
@@ -311,7 +321,7 @@ function Set-Manager {
     
     # Retrieve manager
     try {
-        $ManagerObject = Get-MgUser -Filter "UserPrincipalName eq '$ManagerUPN'" -ErrorAction Stop
+        $ManagerObject = Get-MgUser -UserId $ManagerUPN -ErrorAction Stop
         Write-Log -Message "Manager gefunden" -LogStatus "Info"
     }
     catch {
@@ -321,7 +331,7 @@ function Set-Manager {
 
     # Set manager attribute for the user
     try{
-        Set-MgUserManager -UserId $UserId -ManagerId $ManagerObject.Id
+        Update-MgUser -UserId $UserId -Manager $ManagerObject -ErrorAction stop
         Write-Log -Message "Manager erfolgreich gesetzt" -LogStatus "Success"
     }
     catch {
@@ -376,7 +386,7 @@ while ($true) {
 
             # Whait for the User to be created
             Write-Log -Message "Warte 5 Minuten..." -LogStatus "Info"
-            Start-Sleep -Seconds 10
+            Start-Sleep -Seconds 180
 
             # Get User ID
             $CreatedUser = Get-MgUser -UserId $UPN
