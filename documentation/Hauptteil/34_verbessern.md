@@ -14,7 +14,7 @@ Die Improve-Phase ist der vierte Schritt in einem Six Sigma Projekt. In dieser P
 
 
 ## Was ist Camunda?
-
+<br>
 
 ![Logo Camunda](../../ressources/images/logo_black_camunda.png)
 [Quelle](../Quellverzeichnis/index.md#camunda-logo)
