@@ -116,7 +116,7 @@ Die Signale sind den folgenden Tasks zugeordnet und dienen als zentrale Steuerun
 | -------------------------- | ----------------------------------------- | --------------------------------------------------------------------------------------------------------------- |
 | `Start_new_employee`       | Start Event (Signal)                      | Signal, das von der API gesendet wird, um eine neue Prozessinstanz zu starten.                                  |
 | `employee_send_request`    | Intermediate Event & Start Event (Signal) | Signal, das die Anfrage zur Genehmigung an die GL sendet.                                                       |
-| `gl_approve_request`       | Intermediate Event (Signal)               | Signal, das signalisiert, dass die GL den Antrag genehmigt hat.                                                 |
+| `gl_approve_request`       | Intermediate Event (Signal)               | Signal, das signalisiert, dass die Geschäftsleitung (GL) den Antrag genehmigt hat.                              |
 | `employee_preps_done`      | Intermediate Event (Signal)               | Signal, das meldet, dass der Benutzer erstellt wurde und den SharePoint-Gruppen hinzugefügt wurde.              |
 | `employee_onboarding_done` | End Event & Intermediate Event  (Signal)  | Signal, das das Ende des Onboardings markiert und den Abschluss des Prozesses beim Mitarbeitenden signalisiert. |
 
@@ -151,8 +151,8 @@ In meinem Projekt verwende ich **zwei Service Tasks**, um technische Aufgaben im
     8. Abschluss des Tasks: Rückgabe von Werten an Camunda (**UPN** und **Passwort**).
     
     *Das vollständige Skript kann [hier](../../ressources/scripts/MgGraph_User_Creation.ps1) eingesehen werden.*
-    
-    
+    <br>
+
 2. **SharePoint-Zugriffsrechte vergeben mit PowerShell**  
     Im zweiten PowerShell-Skript werden die Zugriffsrechte des Benutzers konfiguriert. Während in vielen Unternehmen Zugriffsrechte für Laufwerke, Server, Tools oder ähnliche Ressourcen eingerichtet werden, konzentriere ich mich auf **SharePoint**. Da ich in meiner Arbeit bevorzugt mit SharePoint anstelle von klassischen Server-Laufwerken arbeite, liegt hier der Schwerpunkt. Ein zusätzlicher Vorteil von SharePoint ist die Nutzung als **Cloudspeicher**, der flexiblen und ortsunabhängigen Zugriff ermöglicht.
     
