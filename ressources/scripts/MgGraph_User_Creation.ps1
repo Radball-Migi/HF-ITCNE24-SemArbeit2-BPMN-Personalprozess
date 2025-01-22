@@ -394,7 +394,7 @@ while ($true) {
             $password = $result.Password
 
             # Whait for the User to be created
-            Write-Log -Message "Warte 5 Minuten..." -LogStatus "Info"
+            Write-Log -Message "Warte 3 Minuten..." -LogStatus "Info"
             Start-Sleep -Seconds 180
 
             # Get User ID
