@@ -29,7 +29,6 @@ Zusätzlich bietet die Plattform Werkzeuge zur visuellen Modellierung von Prozes
 Insgesamt hilft Camunda Unternehmen dabei, ihre Geschäftsprozesse effizienter zu gestalten und eine bessere Kontrolle über ihre Abläufe zu erlangen.
 
 ## Umsetzung (Improve)
-
 Ich konnte die Checkliste erfolgreich durch ein Camunda-BPMN ersetzen. Ich habe alle analysierten Probleme erkannt und behoben. Das ganze habe ich mit dem Camunda Modeler umgesetzt.
 
 Das _Know-how_ habe ich mir durch meine aktive Teilnahme am BPM-Unterricht bei Thomas Kälin sowie durch das Studium des Praxishandbuchs angeeignet:
@@ -58,22 +57,41 @@ Als ich dieses Verhalten gegoogelt habe, berichteten einige Nutzer, dass sie auc
 "BSP Forum verlinken"
 
 ### Call-Activities
-
 Vorab als Erklärung, die fett umrandeten Tasks werden als Aufruf-Aktivitäten oder Call-Activities bezeichnet. Sie stehen für global definierte Prozesse oder Aufgaben, die im aktuellen Prozess eingebunden sind.
 
 Diese Methode wurde gewählt, da die detaillierte Beschreibung dieser Prozesse den Rahmen der Semesterarbeit überschreiten würde.
 
+### Camunda Container
+Um interaktiv mit dem erstellten Camunda BPMN-Modell zu arbeiten, stellt Camunda einen Container via Docker bereit. Mit diesem Container können Prozessinstanzen gestartet und verwaltet werden. Derzeit wird der Container lokal betrieben, jedoch ist geplant, ihn zukünftig auf Azure zu hosten, um eine skalierbare und cloudbasierte Lösung zu schaffen. Dies ermöglicht eine einfachere Integration in bestehende Cloud-Infrastrukturen und verbessert die Verfügbarkeit und Wartbarkeit.
+
+### REST API – Camunda Platform REST API
+Damit Prozesse durchlaufen können, muss dem System signalisiert werden, dass spezifische Ereignisse eingetroffen sind. Dies erfolgt über die Camunda Platform REST API, die eine einfache Schnittstelle zur Prozesssteuerung bietet. Ereignisse und Interaktionen können direkt über die Swagger UI ausgeführt und getestet werden, was eine effiziente Entwicklung und Fehlerbehebung ermöglicht.
+
 ### Formular
-
 Ursprünglich habe ich im Einreichungsformular erwähnt, dass ich ein Camunda Formular Verwenden werde. Während der Einrichtung des Forms, ist mir aufgefallen, dass beim Eintrittsdatum, das Datum jedes Mal leer bleibt bei der Übermittlung. 
-Auch bereits im Gespräch mit Thomas fiel uns dieses Problem auf und auf die Schnelle haben wir keine Lösung gefunden. Ich habe mich daraufhin entschieden, eine alternative Lösung zu suchen. 
-Anstelle eines Camunda Formulars, habe ich nun ein HTML Formular, mit dem ich beim Absenden eine Prozessinstanz starte und Zeitgleich alle Werte mitliefere. 
-
-Bild Noch genauer machen, damit alles sichtbar ist. 
+Auch bereits im [Gespräch mit Thomas](../Sprints/besprechung_bpmn_23-12-2024.md)  fiel uns dieses Problem auf und auf die Schnelle haben wir keine Lösung gefunden. Ich habe mich daraufhin entschieden, eine alternative Lösung zu suchen. 
+Anstelle eines Camunda Formulars, habe ich nun ein HTML Formular, mit dem ich beim Absenden eine Prozessinstanz starte und Zeitgleich alle Werte mitliefere.
 
 ![Bild Formular](../../ressources/images/form.png)
+*Das HTML-File kann [hier](../../ressources/scripts/Webform.html) eingesehen werden.* 
 
-Das HTML-File kann [hier](../../ressources/scripts/Webform.html) eingesehen werden.
+Um die Formular-Daten an Camunda zu übermitteln, nutze ich wie oben beschrieben die REST API. Beim Klick auf den Button „Absenden“ wird ein API-Call ausgelöst, der das Signal `Start_new_employee` sendet. Dieses Signal dient als Auslöser, um eine neue Prozessinstanz zu starten, die anschliessend die übermittelten Werte übernimmt.
 
-Formular beschreiben und verlinken
+### Signale
+Im [technischen Prozess](../../ressources/images/personaleintrittsprozess_tecnical.svg) arbeite ich anstelle der Intermediate Messages Events, mit Signalen, welche das Camunda versendet. Diverse Intermediate-Catch-Events höhren dann auf die einzelnen Signale. 
+Die Signale sind für die Folgenden Tasks zuständig: 
+
+| Signalname                | Typ                          | Beschreibung                                                                                             |
+|---------------------------|------------------------------|---------------------------------------------------------------------------------------------------------|
+| `Start_new_employee`      | Start signal event           | Startsignal, welches die API versendet, damit eine neue Prozessinstanz gestartet wird.                   |
+| `employee_send_request`   | Intermediate signal event & Start signal event | Signal, welches die Anfrage an die GL sendet, für die Kontrolle und Bestätigung des erfassten Benutzers. |
+| `gl_approve_request`      | Intermediate signal event    | Signal, dass die GL den Antrag genehmigt hat.                                                            |
+| `employee_preps_done`     | Intermediate signal event    | Signal, dass der Benutzer erstellt wurde und den Gruppen für den SharePoint hinzugefügt wurden.          |
+| `employee_onboarding_done`| Signal end event             | Signal, dass das Onboarding fertig ist und der Prozess ist beim Mitarbeitenden abgeschlossen.             |
+
+
+
+
+
+
 
