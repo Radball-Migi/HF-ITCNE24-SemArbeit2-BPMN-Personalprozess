@@ -321,17 +321,22 @@ function Set-Manager {
     
     # Retrieve manager
     try {
-        $ManagerObject = Get-MgUser -UserId $ManagerUPN -ErrorAction Stop
+        $ManagerEntraObject = Get-MgUser -UserId $ManagerUPN -ErrorAction Stop
         Write-Log -Message "Manager gefunden" -LogStatus "Info"
     }
     catch {
         Write-Log -Message "Manager nicht gefunden" -LogStatus "Error"
     }
-    
 
-    # Set manager attribute for the user
+    $ManagerEntraObjectId = $ManagerEntraObject.Id
+    $BodyManagerObject = "https://graph.microsoft.com/v1.0/users/" + $ManagerEntraObjectID
+
+    $ManagerObject = @{
+        "@odata.id" = $BodyManagerObject
+    }
+    
     try{
-        Update-MgUser -UserId $UserId -Manager $ManagerObject -ErrorAction stop
+        Set-MgUserManagerByRef -UserId $UserId -BodyParameter $ManagerObject -ErrorAction stop
         Write-Log -Message "Manager erfolgreich gesetzt" -LogStatus "Success"
     }
     catch {
@@ -339,6 +344,10 @@ function Set-Manager {
     }
         
 }
+
+#Anpassen an Scriptschritte mit MAthieu angeschaut, in Notizen Aufbau abgelegt
+
+##################################################################################################################
 
 while ($true) {
     try {

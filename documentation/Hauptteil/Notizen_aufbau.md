@@ -263,3 +263,39 @@ office_team    : @{type=String; value=eng_sys; valueInfo=}
 
 
 Mögliche Nachrichten Probleme und Zuweisungsfehler mit Benutzern lösen in Camunda.
+
+
+Set-MGUserManager
+
+[Assign manager - Microsoft Graph v1.0 | Microsoft Learn](https://learn.microsoft.com/en-us/graph/api/user-post-manager?view=graph-rest-1.0&tabs=powershell#example) 
+
+```Output
+PS C:\Users\miguel.schneider\OneDrive - TBZ\GitHub_Repos_HF\HF-ITCNE24-SemArbeit2-BPMN-Personalprozess\ressources\scripts> $Manager
+PS C:\Users\miguel.schneider\OneDrive - TBZ\GitHub_Repos_HF\HF-ITCNE24-SemArbeit2-BPMN-Personalprozess\ressources\scripts> 
+PS C:\Users\miguel.schneider\OneDrive - TBZ\GitHub_Repos_HF\HF-ITCNE24-SemArbeit2-BPMN-Personalprozess\ressources\scripts> 
+2025-01-21 11:57:10: Setze Manager...
+2025-01-21 11:57:10: Evaluiere Manager
+2025-01-21 11:57:11: Manager gefunden
+PS C:\Users\miguel.schneider\OneDrive - TBZ\GitHub_Repos_HF\HF-ITCNE24-SemArbeit2-BPMN-Personalprozess\ressources\scripts> $Manager
+dz
+PS C:\Users\miguel.schneider\OneDrive - TBZ\GitHub_Repos_HF\HF-ITCNE24-SemArbeit2-BPMN-Personalprozess\ressources\scripts> $ManagerObject
+
+DisplayName      Id                                   Mail                                           UserPrincipalName
+-----------      --                                   ----                                           -----------------
+Miguel Schneider 61a0bf83-6ebf-4f1b-8bc2-e250f8365052 miguel.schneider@iseschool2013.onmicrosoft.com miguel.schneider@iseschool2013.onmicrosoft.com
+
+PS C:\Users\miguel.schneider\OneDrive - TBZ\GitHub_Repos_HF\HF-ITCNE24-SemArbeit2-BPMN-Personalprozess\ressources\scripts> $ManagerObjectID = $ManagerObject.Id
+PS C:\Users\miguel.schneider\OneDrive - TBZ\GitHub_Repos_HF\HF-ITCNE24-SemArbeit2-BPMN-Personalprozess\ressources\scripts> $ManagerObjectID
+61a0bf83-6ebf-4f1b-8bc2-e250f8365052
+PS C:\Users\miguel.schneider\OneDrive - TBZ\GitHub_Repos_HF\HF-ITCNE24-SemArbeit2-BPMN-Personalprozess\ressources\scripts> $BodyManager = "https://graph.microsoft.com/v1.0/users/" + $ManagerObjectID
+PS C:\Users\miguel.schneider\OneDrive - TBZ\GitHub_Repos_HF\HF-ITCNE24-SemArbeit2-BPMN-Personalprozess\ressources\scripts> $BodyManager
+https://graph.microsoft.com/v1.0/users/61a0bf83-6ebf-4f1b-8bc2-e250f8365052
+PS C:\Users\miguel.schneider\OneDrive - TBZ\GitHub_Repos_HF\HF-ITCNE24-SemArbeit2-BPMN-Personalprozess\ressources\scripts> $NewManager = @{"@odata.id"=$BodyManager}
+PS C:\Users\miguel.schneider\OneDrive - TBZ\GitHub_Repos_HF\HF-ITCNE24-SemArbeit2-BPMN-Personalprozess\ressources\scripts> $NewManager
+
+Name                           Value
+----                           -----
+@odata.id                      https://graph.microsoft.com/v1.0/users/61a0bf83-6ebf-4f1b-8bc2-e250f8365052
+
+PS C:\Users\miguel.schneider\OneDrive - TBZ\GitHub_Repos_HF\HF-ITCNE24-SemArbeit2-BPMN-Personalprozess\ressources\scripts> Set-MgUserManagerByRef -UserId $UserId -BodyParameter $NewManager 
+```
