@@ -299,3 +299,5 @@ Name                           Value
 
 PS C:\Users\miguel.schneider\OneDrive - TBZ\GitHub_Repos_HF\HF-ITCNE24-SemArbeit2-BPMN-Personalprozess\ressources\scripts> Set-MgUserManagerByRef -UserId $UserId -BodyParameter $NewManager 
 ```
+
+Link zu Brownout, wegen Github fehler: https://github.com/orgs/community/discussions/142581
