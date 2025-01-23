@@ -170,17 +170,18 @@ In meinem Projekt verwende ich **zwei Service Tasks**, um technische Aufgaben im
     *Das vollständige Skript kann [hier](../../ressources/scripts/MgGraph_SP_adjust_permissions.ps1) eingesehen werden.* 
     
 
-> [! Info] 
->Beide Skripte sind ausführlich kommentiert, sodass jeder Schritt leicht nachvollziehbar ist. 
->
->Die Vorlage für die Abfrage mit der **Camunda REST API**, ob ein Task vorhanden ist, wurde von Thomas bereitgestellt und als Grundlage verwendet.
+> ℹ️ **Info:**  
+> Beide Skripte sind ausführlich kommentiert, sodass jeder Schritt leicht nachvollziehbar ist.  
+> Die Vorlage für die Abfrage mit der **Camunda REST API**, ob ein Task vorhanden ist, wurde von Thomas bereitgestellt und als Grundlage verwendet.
 
+<br>
 #### SharePoint
 Der **SharePoint** dient als zentraler Datenspeicher und umfasst nicht nur die Speicherung persönlicher Daten (OneDrive), sondern auch Daten, die traditionell auf Netzlaufwerken liegen könnten. Doch der SharePoint kann weit mehr als nur Daten speichern.
 
 In meiner Semesterarbeit nutzen wir den SharePoint beispielsweise als Speicherort für Anleitungen, als Inventar, für Kundenseiten, Prozesslandschaften und viele weitere Anwendungen. Er ist ein vielseitiges Tool, das unterschiedliche Anforderungen in einer zentralisierten Umgebung abdeckt.
 
 ##### Berechtigungsvergabe
+
 In einem Unternehmen ist es essenziell, dass nicht jeder Zugriff auf dieselben Inhalte hat, um sensible Daten zu schützen. So haben beispielsweise die Geschäftsleitung, Mitarbeitende und Lernende unterschiedliche Berechtigungen. Dieser Berechtigungsaufbau kann mit der Struktur eines Laufwerks verglichen werden.
 
 Auf dem SharePoint können Berechtigungen direkt an einzelne Personen vergeben werden. Doch dies ist in der Praxis nicht effizient, da es mit einem hohen administrativen Aufwand verbunden ist. Daher setzt man besser auf Gruppen.
@@ -192,5 +193,21 @@ Es gibt zwei Ansätze für die Gruppenzuweisung:
 
 In meiner Arbeit und auch in der Firma bevorzugen wir den zweiten Ansatz mit **Entra ID-Gruppen**, da er den Verwaltungsaufwand minimiert und gleichzeitig eine konsistente Berechtigungsstruktur gewährleistet.
 
+Für meinen SharePoint habe ich spezifische Entra ID-Gruppen erstellt, die nach einem klaren Schema benannt sind:
 
+- `misch-sem2arbeit-SP-VR` – für Verwaltungsräte
+- `misch-sem2arbeit-SP-Lehrnende` – für Lernende
+- `misch-sem2arbeit-SP-MA` – für Mitarbeitende
+- `misch-sem2arbeit-SP-Schluesselpersonen` – für Schlüsselpersonen
+- `misch-sem2arbeit-SP-GL` – für die Geschäftsleitung
+- `misch-sem2arbeit-SP-Sachbearbeitung` – für Sachbearbeiter
+- `misch-sem2arbeit-SP-Admin` – für Administratoren
 
+Die Namen der Gruppen sind wie folgt aufgebaut:
+
+- **`misch`**: Mein persönliches Kürzel in der Firma.
+- **`sem2arbeit`**: Ein Hinweis darauf, dass die Gruppen im Rahmen der **Semesterarbeit 2** erstellt wurden.
+- **`SP`**: Abkürzung für SharePoint.
+- **Rolle**: Die jeweilige Funktion oder Abteilung, wie z. B. GL (Geschäftsleitung) oder MA (Mitarbeitende).
+
+Diese Struktur stellt sicher, dass Berechtigungen nachvollziehbar und konsistent verwaltet werden können. Durch die zentrale Verwaltung in Entra ID werden Änderungen effizient und ohne zusätzlichen administrativen Aufwand auf alle SharePoint-Sites angewendet.
