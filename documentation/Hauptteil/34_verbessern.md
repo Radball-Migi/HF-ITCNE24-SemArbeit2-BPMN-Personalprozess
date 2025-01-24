@@ -150,7 +150,7 @@ In meinem Projekt verwende ich **zwei Service Tasks**, um technische Aufgaben im
         - Hinzufügen des Managers zum Benutzer.
     8. Abschluss des Tasks: Rückgabe von Werten an Camunda (**UPN** und **Passwort**).
     
-    *Das vollständige Skript kann [hier](../../ressources/scripts/MgGraph_User_Creation.ps1.txt) eingesehen werden.*
+    *Das vollständige Skript kann [hier](https://github.com/Radball-Migi/HF-ITCNE24-SemArbeit2-BPMN-Personalprozess/blob/main/ressources/scripts/MgGraph_User_Creation.ps1) eingesehen werden.*
     <br>
 
 2. **SharePoint-Zugriffsrechte vergeben mit PowerShell**  
@@ -167,7 +167,7 @@ In meinem Projekt verwende ich **zwei Service Tasks**, um technische Aufgaben im
         - Zuweisung des Benutzers zu den Gruppen, die für die jeweiligen Rollen definiert sind.
     7. Abschluss des Tasks: Es erfolgt keine Werte-Rückgabe an Camunda.
     
-    *Das vollständige Skript kann [hier](../../ressources/scripts/MgGraph_SP_adjust_permissions.ps1) eingesehen werden.* 
+    *Das vollständige Skript kann [hier](https://github.com/Radball-Migi/HF-ITCNE24-SemArbeit2-BPMN-Personalprozess/blob/main/ressources/scripts/MgGraph_SP_adjust_permissions.ps1) eingesehen werden.* 
     
 
 > ℹ️ **Info:**  
