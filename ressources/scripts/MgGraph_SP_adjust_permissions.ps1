@@ -28,13 +28,46 @@ function Write-Log {
         [string]$LogStatus
     )
 
+    # Define log directory and file
+    $LogDirectory = "C:\temp\Personaleintrittsprozess\logs"
+    $LogFile = "$LogDirectory\sp_rights_customize-$(Get-Date -Format 'yyyy-MM-dd').log"
+
+    # Ensure that the log directory exists
+    if (-not (Test-Path -Path $LogDirectory)) {
+        New-Item -ItemType Directory -Path $LogDirectory -Force | Out-Null
+    }
+
+    # Check and add title area if the file is newly created
+    if (-not (Test-Path -Path $LogFile)) {
+        $ScriptTitle = "MgGraph_SP_adjust_permissions.ps1" # Skripttitle
+        $CurrentDate = Get-Date -Format 'yyyy-MM-dd'
+        $FullTitle = "$ScriptTitle    -    $CurrentDate"
+        $Separator = "*" * $FullTitle.Length
+        $TitleBlock = "$Separator`n$FullTitle`n$Separator`n"
+        Set-Content -Path $LogFile -Value $TitleBlock
+    }
+
+    # Create timestamp
+    $TimeStamp = Get-Date -Format 'yyyy-MM-dd HH:mm:ss'
+
+    # Format log message
+    $LogEntry = $TimeStamp + ": " + $Message
+
+    # Write log entry in the console
     switch ($LogStatus) {
-        "Info" { Write-Host "$(Get-Date -Format 'yyyy-MM-dd HH:mm:ss'): $Message" }
-        "Warning" { Write-Host "$(Get-Date -Format 'yyyy-MM-dd HH:mm:ss'): $Message" -ForegroundColor Yellow }
-        "Error" {Write-Host "$(Get-Date -Format 'yyyy-MM-dd HH:mm:ss'): $Message" -ForegroundColor Red}
-        "Success" {Write-Host "$(Get-Date -Format 'yyyy-MM-dd HH:mm:ss'): $Message" -ForegroundColor Green}
-        Default { Write-Host "$(Get-Date -Format 'yyyy-MM-dd HH:mm:ss'): $Message" }
-    }  
+        "Info" { Write-Host $LogEntry }
+        "Warning" { Write-Host $LogEntry -ForegroundColor Yellow }
+        "Error" { Write-Host $LogEntry -ForegroundColor Red }
+        "Success" { Write-Host $LogEntry -ForegroundColor Green }
+        Default { Write-Host $LogEntry }
+    }
+
+    # Write log entry to the log-file
+    try {
+        Add-Content -Path $LogFile -Value $LogEntry
+    } catch {
+        Write-Host "Fehler beim Schreiben des Logeintrags in die Datei: $_" -ForegroundColor Red
+    }
 }
 
 # Funktion: Camunda Fetch and Lock
