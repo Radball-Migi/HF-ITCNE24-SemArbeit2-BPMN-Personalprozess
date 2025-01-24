@@ -74,7 +74,7 @@ Um interaktiv mit dem erstellten Camunda BPMN-Modell zu arbeiten, wird ein **Doc
 **Hauptfunktionen des Containers:**
 - **Prozessinstanzen starten:** Neue Instanzen können direkt initiiert werden.
 - **Statusüberwachung:** Der aktuelle Fortschritt und Zustand der Prozessinstanzen ist jederzeit nachvollziehbar.
-- **Interaktive Steuerung:** Benutzer können manuell in den Prozess eingreifen, indem sie Aufgaben abschließen oder Signale senden.
+- **Interaktive Steuerung:** Benutzer können manuell in den Prozess eingreifen, indem sie Aufgaben abschliessen oder Signale senden.
 
 Derzeit wird der Container lokal betrieben. Langfristig ist jedoch geplant, ihn auf **Azure** zu hosten. Dies bietet mehrere Vorteile:
 
@@ -150,7 +150,7 @@ In meinem Projekt verwende ich **zwei Service Tasks**, um technische Aufgaben im
         - Hinzufügen des Managers zum Benutzer.
     8. Abschluss des Tasks: Rückgabe von Werten an Camunda (**UPN** und **Passwort**).
     
-    *Das vollständige Skript kann [hier](../../ressources/scripts/MgGraph_User_Creation.ps1) eingesehen werden.*
+    *Das vollständige Skript kann [hier](../../ressources/scripts/MgGraph_User_Creation.ps1.txt) eingesehen werden.*
     <br>
 
 2. **SharePoint-Zugriffsrechte vergeben mit PowerShell**  
@@ -211,3 +211,14 @@ Die Namen der Gruppen sind wie folgt aufgebaut:
 - **Rolle**: Die jeweilige Funktion oder Abteilung, wie z. B. GL (Geschäftsleitung) oder MA (Mitarbeitende).
 
 Diese Struktur stellt sicher, dass Berechtigungen nachvollziehbar und konsistent verwaltet werden können. Durch die zentrale Verwaltung in Entra ID werden Änderungen effizient und ohne zusätzlichen administrativen Aufwand auf alle SharePoint-Sites angewendet.
+
+___ 
+### Fazit zur Improve-Phase
+
+Die **Improve-Phase** bildet den entscheidenden Meilenstein in einem Six Sigma-Projekt, bei dem aus analysierten Daten umsetzbare Verbesserungen entwickelt und implementiert werden. Mit der Integration von **Camunda** konnte ein logischer und technischer Prozess geschaffen werden, der nicht nur den Personaleintrittsprozess optimiert, sondern auch die Grundlage für eine zukunftssichere Automatisierung legt.
+
+Die Kombination aus durchdachten Modellen, interaktiven Tools wie dem **Camunda Modeler** und automatisierten Aufgaben mit **PowerShell-Skripten** zeigt, wie technologische Ansätze und fundiertes Prozesswissen zusammenwirken können, um nachhaltige Ergebnisse zu erzielen. Der Einsatz von Signalen, Call-Activities und Service Tasks sorgt dabei für eine klare Struktur, Flexibilität und Effizienz.
+
+Besonders die Einführung von **Entra ID-Gruppen** für die zentrale Verwaltung von Berechtigungen stellt einen weiteren Schritt zur Optimierung der Workflows dar. Mit diesen Gruppen wurde ein System geschaffen, das sowohl skalierbar als auch einfach zu verwalten ist. Durch den Einsatz von Cloud-Technologien wie **SharePoint** und die zukünftige Integration in **Azure** wird die Lösung nicht nur robust, sondern auch anpassbar an die Anforderungen der digitalen Transformation.
+
+Insgesamt hat die Implementierung der Verbesserungen gezeigt, dass die Verbindung aus systematischem Ansatz, technischer Präzision und strategischer Planung eine Grundlage für nachhaltige Prozessverbesserungen darstellt. Die **Improve-Phase** schliesst damit nicht nur einen wichtigen Teil des Projekts ab, sondern öffnet auch den Weg für weitere Optimierungspotenziale und Innovationen.
