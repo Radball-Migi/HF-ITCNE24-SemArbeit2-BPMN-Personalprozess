@@ -174,6 +174,7 @@ In meinem Projekt verwende ich **zwei Service Tasks**, um technische Aufgaben im
 > Beide Skripte sind ausführlich kommentiert, sodass jeder Schritt leicht nachvollziehbar ist.  
 > Die Vorlage für die Abfrage mit der **Camunda REST API**, ob ein Task vorhanden ist, wurde von Thomas bereitgestellt und als Grundlage verwendet.
 
+Die Skripte werden derzeit lokal auf dem Notebook ausgeführt, da es Probleme mit der Zertifikatsanmeldung auf dem Camunda-Server gab. Um keine unnötige Zeit mit der Behebung dieses Problems zu verlieren, habe ich mich entschieden, die Skripte vorerst lokal zu starten. Sobald die Zertifikatsanmeldung gelöst ist, werde ich die Skripte entsprechend integrieren und anpassen.
 <br>
 #### SharePoint
 Der **SharePoint** dient als zentraler Datenspeicher und umfasst nicht nur die Speicherung persönlicher Daten (OneDrive), sondern auch Daten, die traditionell auf Netzlaufwerken liegen könnten. Doch der SharePoint kann weit mehr als nur Daten speichern.
