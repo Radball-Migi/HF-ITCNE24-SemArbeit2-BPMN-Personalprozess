@@ -25,16 +25,16 @@ Um das Testing grob zusammen zufassen, habe ich untenstehend eine Tabelle für d
 
 ### Testmatrix
 
-| **Test-ID** | **Was wird getestet?**                                                              | **Zweck / Ziel**                                                                                                                  | **Erwartetes Ergebnis**                                                               | **Effektives Ergebnis** | **Dokumentation / Link**          |
-| ----------- | ----------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------- | ----------------------- | --------------------------------- |
-| T01         | Erfassung neuer Mitarbeiter via HTML-Formular                                       | Wird beim Absenden  des Forms alles via API mit gesendet                                                                          | Beim absenden des Formulars erscheint die Meldung erfolgreich                         |                         | [Dokumentation](#)                |
-| T02         | Datenübertragung und Start der Prozessinstanz                                       | Prozessinstanz wird gestartet und die Daten aus dem Formular an den Prozess übergeben                                             | Prozessinstanz wird gestartet und Variablen sind sichtbar in den Tasks                |                         | [Dokumentation](#)                |
-| T03         | Übernahme der Tasks und Bestätigung des Genehmigungsantrags                         | Taskübernahme und Exckusive Gateway funktioniert                                                                                  | Task kann übernommen und bearbeitet werden.<br>Nach annahme wird das Signal versendet |                         | [Dokumentation](#)                |
-| T04         | Benutzer erstellung wird gestartet und läuft erfolgreich durch. Dauer ca. 5-10 min. | Benutzer wird erstellt, mit Department und Managerzuweisung.<br>Zusätzlich wird der Benutzer auch in die Lizenzgruppe hinzugefügt | Benutzer wird erstellt, in den Properties sind auch Department und Manager zugewiesen |                         | [Dokumentation](#)                |
-| T05         | Gruppenzuweisung funktioniert via Script                                            | Zuvor erstellter Benutzer wird den Entra-ID-Gruppen hinzugefügt, anhand der Rollenzuweisung.                                      | Benutzer wird in die Entra-ID-Gruppen hinzugefügt                                     |                         | [Dokumentation](#)                |
-| T06         | Time intermidiate Event                                                             | Der Zwischenevent triggert erst wenn das Datum erreicht wird, welches zuvor im Formular eingegeben wurde.                         | Datumsvalue ist im Event drin.                                                        |                         |                                   |
-| T07         | Logs                                                                                | Werden die Logs im besagten Pfad erstellt?                                                                                        | Logs werden im Pfad `C:\temp\PErsonaleintritt` erstellt                               |                         | [Logs]()                          |
-| T08         | Camunda Server                                                                      | Existiert und funktioniert der Container                                                                                          | Ist der Container vorhanden und läuft dieser auch.                                    |                         | [Camunda Server](#camunda-server) |
+| **Test-ID** | **Was wird getestet?**                                          | **Zweck / Ziel**                                                                                                                  | **Erwartetes Ergebnis**                                                               | **Effektives Ergebnis** | **Dokumentation / Link**          |
+| ----------- | --------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------- | ----------------------- | --------------------------------- |
+| T01         | Erfassung neuer Mitarbeiter via HTML-Formular                   | Wird beim Absenden  des Forms alles via API mit gesendet                                                                          | Beim absenden des Formulars erscheint die Meldung erfolgreich                         |                         | [Dokumentation](#)                |
+| T02         | Datenübertragung und Start der Prozessinstanz                   | Prozessinstanz wird gestartet und die Daten aus dem Formular an den Prozess übergeben                                             | Prozessinstanz wird gestartet und Variablen sind sichtbar in den Tasks                |                         | [Dokumentation](#)                |
+| T03         | Übernahme der Tasks und Bestätigung des Genehmigungsantrags     | Taskübernahme und Exckusive Gateway funktioniert                                                                                  | Task kann übernommen und bearbeitet werden.<br>Nach annahme wird das Signal versendet |                         | [Dokumentation](#)                |
+| T04         | Benutzer erstellung wird gestartet und läuft erfolgreich durch. | Benutzer wird erstellt, mit Department und Managerzuweisung.<br>Zusätzlich wird der Benutzer auch in die Lizenzgruppe hinzugefügt | Benutzer wird erstellt, in den Properties sind auch Department und Manager zugewiesen |                         | [Dokumentation](#)                |
+| T05         | Gruppenzuweisung via Script                                     | Zuvor erstellter Benutzer wird den Entra-ID-Gruppen hinzugefügt, anhand der Rollenzuweisung.                                      | Benutzer wird in die Entra-ID-Gruppen hinzugefügt                                     |                         | [Dokumentation](#)                |
+| T06         | Time intermidiate Event                                         | Der Zwischenevent triggert erst wenn das Datum erreicht wird, welches zuvor im Formular eingegeben wurde.                         | Datumsvalue ist im Event drin.                                                        |                         |                                   |
+| T07         | Logs                                                            | Werden die Logs im besagten Pfad erstellt?                                                                                        | Logs werden im Pfad `C:\temp\PErsonaleintritt` erstellt                               |                         | [Logs](#logs)                     |
+| T08         | Camunda Server                                                  | Existiert und funktioniert der Container                                                                                          | Ist der Container vorhanden und läuft dieser auch.                                    |                         | [Camunda Server](#camunda-server) |
 
 **Hinweise**
 - **Test-ID:** Eine eindeutige Kennung, um die Tests zu identifizieren und sie einfacher referenzieren zu können.
@@ -48,7 +48,7 @@ Mithilfe von Camunda konnte ich die BPMN Prozesse aufzeichnen, technisch nutzen 
 
 Mithilfe des Camunda Cockpits konnte ich den Status der Prozessinstanzen grafisch nachverfolgen. Dieses Tool ermöglicht es, den Ablauf im Detail zu überprüfen und sicherzustellen, dass sich der Prozess an der richtigen Stelle im Workflow befindet.
 
-#### Camunda Server
+#### **Camunda Server**
 Den Camunda Server habe ich aktuell auf einem Docker Container, auf meinem Lokalen Notebook am Laufen. 
 Für den ersten Moment ist dies in Ordnung, jedoch ist dies ausbaufähig, damit dieser in Zukunft auch auf Azure laufen würde. 
 
@@ -66,15 +66,6 @@ So entsteht dann dieser Container.
 
 ![Camunda Server Container](../../ressources/images/camunda_server_on_docker.png)
 
-### Logs
-
-Damit wir die Fehler im System während dem Betrieb erkennen können, haben wir während der Asuführung ein Log, welches erstellt wird. 
-Der Speicherort ist ein ORdner, im `C:\temp`. 
-Die Files lauten:
-- `.\Personaleintritt\user_creation-2025-01-24.log` 
-- `.\Personaleintritt\sp_rights_customize-2025-01-24.log`
-
-![Logs](../../ressources/images/logfiles.png)
 
 ### Scripts
 
@@ -86,3 +77,79 @@ Das entsprechende Script kann unter folgendem Link eingesehen werden:
 - [MgGraph_User_Creation.ps1](https://github.com/Radball-Migi/HF-ITCNE24-SemArbeit2-BPMN-Personalprozess/blob/main/ressources/scripts/MgGraph_User_Creation.ps1)
 - [MgGraph_SP_adjust_permissions.ps1](https://github.com/Radball-Migi/HF-ITCNE24-SemArbeit2-BPMN-Personalprozess/blob/main/ressources/scripts/MgGraph_SP_adjust_permissions.ps1)
 
+
+### Logs
+
+Damit wir die Fehler im System während dem Betrieb erkennen können, haben wir während der Asuführung ein Log, welches erstellt wird. 
+Der Speicherort ist ein Ordner, im `C:\temp`. 
+Die Files lauten:
+- `.\Personaleintritt\logs\user_creation-[Aktuelles Datum].log` 
+- `.\Personaleintritt\logs\sp_rights_customize-[Aktuelles Datum].log`
+
+![Logs](../../ressources/images/logfiles.png)
+
+Die Logs sehen folgendermassen aus:
+
+```Text
+********************************************
+MGGraph_User_Creation.ps1    -    2025-01-24
+********************************************
+
+2025-01-24 22:50:53: Starte FetchAndLock von Tasks...
+2025-01-24 22:50:53: FetchAndLock abgeschlossen.
+2025-01-24 22:50:53: Verarbeite Task ID: 90c4c2f8-da99-11ef-9510-0242ac110002
+2025-01-24 22:50:53: Hole Benutzerinformationen von Camunda...
+2025-01-24 22:50:53: Importiere Login-Informationen...
+2025-01-24 22:50:53: Login-Informationen von Local importieren
+2025-01-24 22:50:53: Login-Informationen erfolgreich importiert.
+2025-01-24 22:50:53: Verbindung mit Microsoft Graph wird hergestellt...
+2025-01-24 22:50:53: Verbindung mit Microsoft Graph erfolgreich
+2025-01-24 22:50:53: Erstelle neuen Benutzer...
+2025-01-24 22:50:53: Prüfe UPN...
+2025-01-24 22:50:53: UPN gefunden: Daniel.Mustermann1@iseschool2013.onmicrosoft.com
+2025-01-24 22:50:53: Erstelle neues Passwort...
+2025-01-24 22:50:53: Generiere Passwort...
+2025-01-24 22:50:53: Passwort erfolgreich generiert.
+2025-01-24 22:50:53: Evaluiere Department
+2025-01-24 22:50:53: Benutzer Mustermann, Daniel mit UPN Daniel.Mustermann1@iseschool2013.onmicrosoft.com erfolgreich erstellt.
+2025-01-24 22:50:53: Warte 3 Minuten...
+2025-01-24 22:53:53: Setze Manager...
+2025-01-24 22:53:53: Evaluiere Manager
+2025-01-24 22:53:54: Manager gefunden
+2025-01-24 22:53:54: Manager erfolgreich gesetzt
+2025-01-24 22:53:54: Schliesse Task ID: 90c4c2f8-da99-11ef-9510-0242ac110002 ab...
+2025-01-24 22:53:54: Task ID: 90c4c2f8-da99-11ef-9510-0242ac110002 erfolgreich abgeschlossen.
+2025-01-24 22:53:54: Task ID: 90c4c2f8-da99-11ef-9510-0242ac110002 abgeschlossen.
+2025-01-24 22:53:54: Starte FetchAndLock von Tasks...
+2025-01-24 22:53:54: FetchAndLock abgeschlossen.
+2025-01-24 22:53:54: Keine Tasks gefunden. Warte...
+```
+*Benutzererstellung*
+
+```Text
+****************************************************
+MgGraph_SP_adjust_permissions.ps1    -    2025-01-24
+****************************************************
+
+2025-01-24 22:54:53: Starte FetchAndLock von Tasks...
+2025-01-24 22:54:53: FetchAndLock abgeschlossen.
+2025-01-24 22:54:53: Verarbeite Task ID: b44a17eb-da9d-11ef-9510-0242ac110002
+2025-01-24 22:54:53: Hole Benutzerinformationen von Camunda...
+2025-01-24 22:54:53: Importiere Login-Informationen...
+2025-01-24 22:54:53: Login-Informationen von Local importieren
+2025-01-24 22:54:53: Login-Informationen erfolgreich importiert.
+2025-01-24 22:54:53: Verbindung mit Microsoft Graph wird hergestellt...
+2025-01-24 22:54:53: Setze Rechte für Rolle: gl
+2025-01-24 22:54:53: Rechte für gl gesetzt.
+2025-01-24 22:54:53: Setze Rechte für Rolle: ma
+2025-01-24 22:54:53: Rechte für ma gesetzt.
+2025-01-24 22:54:53: Schließe Task ID: b44a17eb-da9d-11ef-9510-0242ac110002 ab...
+2025-01-24 22:54:53: Task ID: b44a17eb-da9d-11ef-9510-0242ac110002 erfolgreich abgeschlossen.
+2025-01-24 22:54:53: Task ID: b44a17eb-da9d-11ef-9510-0242ac110002 abgeschlossen.
+2025-01-24 22:54:53: Starte FetchAndLock von Tasks...
+2025-01-24 22:54:53: FetchAndLock abgeschlossen.
+2025-01-24 22:54:53: Keine Tasks gefunden. Warte...
+```
+*SharePoint-Zugriffsrechte vergeben*
+
+Zeitgleich wenn das Script ausgeführt wird, wird das Log auch im Terminal angezeigt. 
