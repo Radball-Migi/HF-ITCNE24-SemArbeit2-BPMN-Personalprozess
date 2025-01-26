@@ -20,7 +20,7 @@ ___
 
 #### Ausgangslage
 Bild mit KI generiert (<a href="https://copilot.cloud.microsoft/" target="_blank">Microsoft Copilot</a>)
-#### Ziele
+#### **Ziele**
 <a href="https://www.flaticon.com/free-icon/goals_10605945?term=goal&related_id=10605945" target="_blank">Flaticon</a> 
 #### Kanban
 <a href="https://ifm-business.de/aktuelles/business-news/kanban-prozesse-visualisieren-und-verbessern.html" target="_blank">ifm-business.de</a> 
