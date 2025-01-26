@@ -20,251 +20,176 @@ Trotzdem habe ich bereits während der [**Improve-Phase**](./34_verbessern.md) k
 
 ## Testing
 
-Für das Testing habe ich verschiedene Szenarien durchgespielt, die in der Praxis auftreten könnten, um die Funktionsfähigkeit des Prozesses sicherzustellen. 
-Um das Testing grob zusammen zufassen, habe ich untenstehend eine Tabelle für das Testing erstellt. Mit einer Testingtabelle:
+Die Testing-Phase war entscheidend, um die Funktionalität, Stabilität und Zuverlässigkeit des gesamten Prozesses zu gewährleisten. Dabei wurden verschiedene praxisnahe Szenarien durchgespielt, die den Workflow unter realistischen Bedingungen simulierten. Ziel der Testing-Phase war es, mögliche Schwachstellen frühzeitig zu erkennen, den reibungslosen Ablauf zu validieren und sicherzustellen, dass alle Prozessschritte wie vorgesehen funktionieren. Die dokumentierten Testergebnisse sind in der nachfolgenden Testmatrix übersichtlich zusammengefasst.
 
 ### Testmatrix
 
-| **Test-ID** | **Was wird getestet?**                                          | **Zweck / Ziel**                                                                                                                  | **Erwartetes Ergebnis**                                                               | **Effektives Ergebnis** | **Dokumentation / Link**          |
-| ----------- | --------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------- | ----------------------- | --------------------------------- |
-| T01         | Erfassung neuer Mitarbeiter via HTML-Formular                   | Wird beim Absenden  des Forms alles via API mit gesendet                                                                          | Beim absenden des Formulars erscheint die Meldung erfolgreich                         |                         | [Dokumentation](#)                |
-| T02         | Datenübertragung und Start der Prozessinstanz                   | Prozessinstanz wird gestartet und die Daten aus dem Formular an den Prozess übergeben                                             | Prozessinstanz wird gestartet und Variablen sind sichtbar in den Tasks                |                         | [Dokumentation](#)                |
-| T03         | Übernahme der Tasks und Bestätigung des Genehmigungsantrags     | Taskübernahme und Exckusive Gateway funktioniert                                                                                  | Task kann übernommen und bearbeitet werden.<br>Nach annahme wird das Signal versendet |                         | [Dokumentation](#)                |
-| T04         | Benutzer erstellung wird gestartet und läuft erfolgreich durch. | Benutzer wird erstellt, mit Department und Managerzuweisung.<br>Zusätzlich wird der Benutzer auch in die Lizenzgruppe hinzugefügt | Benutzer wird erstellt, in den Properties sind auch Department und Manager zugewiesen |                         | [Dokumentation](#)                |
-| T05         | Gruppenzuweisung via Script                                     | Zuvor erstellter Benutzer wird den Entra-ID-Gruppen hinzugefügt, anhand der Rollenzuweisung.                                      | Benutzer wird in die Entra-ID-Gruppen hinzugefügt                                     |                         | [Dokumentation](#)                |
-| T06         | Time intermidiate Event                                         | Der Zwischenevent triggert erst wenn das Datum erreicht wird, welches zuvor im Formular eingegeben wurde.                         | Datumsvalue ist im Event drin.                                                        |                         |                                   |
-| T07         | Logs                                                            | Werden die Logs im besagten Pfad erstellt?                                                                                        | Logs werden im Pfad `C:\temp\PErsonaleintritt` erstellt                               |                         | [Logs](#logs)                     |
-| T08         | Camunda Server                                                  | Existiert und funktioniert der Container                                                                                          | Ist der Container vorhanden und läuft dieser auch.                                    |                         | [Camunda Server](#camunda-server) |
+|**Test-ID**|**Was wird getestet?**|**Zweck / Ziel**|**Erwartetes Ergebnis**|**Effektives Ergebnis**|**Dokumentation / Link**|
+|---|---|---|---|---|---|
+|T01|Erfassung neuer Mitarbeiter via HTML-Formular|Wird beim Absenden des Forms alles via API mit gesendet?|Beim Absenden des Formulars erscheint die Meldung "Erfolgreich".|Erfolgreich|[Dokumentation](#)|
+|T02|Datenübertragung und Start der Prozessinstanz|Prozessinstanz wird gestartet und die Daten aus dem Formular an den Prozess übergeben|Prozessinstanz wird gestartet, Variablen sind sichtbar in den Tasks|Erfolgreich|[Dokumentation](#)|
+|T03|Übernahme der Tasks und Bestätigung des Genehmigungsantrags|Funktioniert die Taskübernahme und das Exclusive Gateway korrekt?|Task kann übernommen und bearbeitet werden.  <br>Nach Annahme wird ein Signal gesendet.|Erfolgreich|[Dokumentation](#)|
+|T04|Benutzererstellung wird gestartet und läuft erfolgreich durch.|Wird der Benutzer erstellt und korrekt den Gruppen sowie der Lizenz zugewiesen?|Benutzer wird mit vollständigen Eigenschaften (Abteilung, Manager) erstellt.|Erfolgreich|[Dokumentation](#)|
+|T05|Gruppenzuweisung via Script|Wird der Benutzer anhand seiner Rollen korrekt den Entra-ID-Gruppen zugewiesen?|Benutzer wird korrekt in die Entra-ID-Gruppen hinzugefügt.|Erfolgreich|[Dokumentation](#)|
+|T06|Timer Intermediate Event|Triggert das Timer Event korrekt zum im Formular angegebenen Datum?|Der Timer verwendet den korrekten Datumswert aus dem Formular.|Erfolgreich||
+|T07|Logs|Werden die Logs im vorgegebenen Pfad erstellt?|Logs werden unter `C:\temp\Personaleintritt` korrekt erstellt.|Erfolgreich|[Logs](#logs)|
+|T08|Camunda Server|Ist der Docker-Container für den Camunda Server vorhanden und läuft dieser stabil?|Der Container ist aktiv und der Server funktioniert einwandfrei.|Erfolgreich|[Camunda Server](#camunda-server)|
 
-**Hinweise**
-- **Test-ID:** Eine eindeutige Kennung, um die Tests zu identifizieren und sie einfacher referenzieren zu können.
-- **Dokumentation / Link:** Verlinkt direkt zur Dokumentation, spezifischen BPMN-Diagrammen oder zugehörigen Bereichen im Repository.
-- Diese Matrix soll sicherstellen, dass alle relevanten Bereiche des Personalprozesses systematisch getestet und dokumentiert werden.
+**Hinweise zur Testmatrix:**
 
+- **Test-ID:** Dient zur eindeutigen Identifikation und Referenzierung der Tests.
+- **Dokumentation / Link:** Verweist auf die zugehörige Dokumentation, BPMN-Diagramme oder spezifische Bereiche im Repository.
+
+---
 
 ### Camunda
 
-Mithilfe von Camunda konnte ich die BPMN Prozesse aufzeichnen, technisch nutzen und mittels Server eine vollfunktionsfähige Lösung bereitstellen. 
-
-Mithilfe des Camunda Cockpits konnte ich den Status der Prozessinstanzen grafisch nachverfolgen. Dieses Tool ermöglicht es, den Ablauf im Detail zu überprüfen und sicherzustellen, dass sich der Prozess an der richtigen Stelle im Workflow befindet.
+Camunda wurde als zentrale Plattform zur Modellierung und Steuerung der BPMN-Prozesse verwendet. Mit der Kombination aus Camunda-Server, BPMN-Diagrammen und der API-Integration konnten alle Anforderungen des Personalprozesses erfolgreich umgesetzt werden.
 
 #### **Camunda Server**
-Den Camunda Server habe ich aktuell auf einem Docker Container, auf meinem Lokalen Notebook am Laufen. 
-Für den ersten Moment ist dies in Ordnung, jedoch ist dies ausbaufähig, damit dieser in Zukunft auch auf Azure laufen würde. 
 
-Der Camunda-Server wurde anhand einem Image erstellt, welches wir auch bereits im Unterricht verwendet haben. mit der bereits eingerichteten API, habe ich ein Image erstellt, welches ich dann für die Semesterarbeit verwenden konnte.
+Der Camunda-Server läuft derzeit in einem Docker-Container auf einem lokalen Notebook. Diese Konfiguration ist für den aktuellen Stand ausreichend, bietet jedoch Potenzial für Verbesserungen, wie beispielsweise eine Migration auf Azure zur Erhöhung der Skalierbarkeit und Sicherheit.
 
-![Image Camunda Server](../../ressources/images/image_camunda_server_on_docker.png)
+**Screenshots des Camunda-Servers:**
 
-*Images on Docker Desktop*
+- Übersicht der Docker-Images:  
+    ![Image Camunda Server](../../ressources/images/image_camunda_server_on_docker.png)
+    
+- Container-Ansicht in Docker Desktop:  
+    ![Camunda Server Container](../../ressources/images/camunda_server_on_docker.png)
+    
 
-Mit diesem Image und nachfolgenden Befehl, können wir innerhalb von 10-15 Sekunden einen neuen Container erstellen. 
+**Docker-Befehl zur Container-Erstellung:**
 
 ```Terminal
 docker run -d --name ITCNE-SEMAR2-CAMSRV -p 8080:8080 camunda/camunda-bpm-platform:run-latest
 ```
 
-So entsteht dann dieser Container.
-
-![Camunda Server Container](../../ressources/images/camunda_server_on_docker.png)
-
-*Camunda Container on Docker Desktop*
-
-
 #### **Formular**
 
-Das Formular wurde während der Arbeit von einem Camunda Form zu einem HTML Form umgeschrieben, da es Probleme gab, mit dem Datumsfeld, welches erst kurz vor Arbeitsabgabe gelösst werden konnte. 
-Da mitlerweile das HTML sehr gut funktionierte, bin ich bei diesem Geblieben. 
+Das ursprünglich verwendete Camunda-Formular wurde aufgrund von Problemen mit dem Datumsfeld in ein HTML-Formular umgeschrieben. Dieses HTML-Formular konnte die Anforderungen vollständig erfüllen und ist inzwischen stabil.
 
-![Formular](../../ressources/images/form_filled_out.png)
+**Screenshot des ausgefüllten Formulars:** ![Formular](../../ressources/images/form_filled_out.png)
 
-*Ausgefülltes Formular*
+#### **BPMN-Diagramme**
 
-#### **Camunda BPMN Diagramm**
+Die BPMN-Diagramme sind der zentrale Bestandteil des Workflows. Sie definieren den Ablauf, von der Datenerfassung bis hin zur Benutzererstellung und der Gruppenzuweisung. Die Diagramme wurden bereits in der [Improve-Phase](./34_verbessern.md#Umsetzung-(Improve)) beschrieben.
 
-Die BPMN-Diagramme habe ich bereits in der [Improve Phase](./34_verbessern.md#Umsetzung-(Improve)) erläutert und können auch dort eingesehen werden.
+#### **Camunda Cockpit**
 
+Das **Camunda Cockpit** wurde verwendet, um den Status der Prozessinstanzen zu überwachen und sicherzustellen, dass diese den vorgesehenen Workflow durchlaufen. Mit den im Cockpit dargestellten **Tokens** lässt sich der aktuelle Status jeder Prozessinstanz visuell nachvollziehen. Dies ist besonders hilfreich, um Fehlerquellen zu identifizieren oder Prozesse zu optimieren.
 
-#### **Camunda Prozess**
+**Beispiele für Token-Visualisierungen:**
 
+- **Token beim Mitarbeitenden**:  
+    Der Prozess hat sich an der Stelle des Mitarbeitenden eingeordnet. Dies zeigt, dass der Prozess die Daten korrekt verarbeitet hat und die nächste Aufgabe (Usertask) bereitsteht.  
+    ![Tokens Employee](../../ressources/images/tokens_in_camunda_employee.png)
+    
+- **Token bei der Geschäftsleitung (GL)**:  
+    Hier ist erkennbar, dass der Prozess erfolgreich zur Genehmigung an die Geschäftsleitung übergeben wurde. Die Tokens zeigen den Status an, bevor auf eine Entscheidung gewartet wird.  
+    ![Tokens GL](../../ressources/images/tokens_in_camunda_gl.png)
+    
 
+**Überprüfung der Variablen in einem Task**:  
+Um sicherzustellen, dass die Prozessvariablen korrekt übermittelt werden, können diese direkt in der Camunda-Oberfläche überprüft werden. In diesem Beispiel sind die zuvor eingegebenen Variablen aus dem HTML-Formular sichtbar.  
+![Variables](../../ressources/images/vars_gl_camunda.png)  
+_Variablen, die aus dem Formular übergeben wurden_
 
+**Übersicht der Tasks für die Geschäftsleitung**:  
+Im Cockpit ist ersichtlich, dass der Geschäftsleitung nach dem Prozessstart zwei Usertasks zugewiesen wurden. Diese Tasks können über die Übersicht oder das Taskboard bearbeitet werden.  
+![User-Tasks GL](../../ressources/images/user_tasks_gl_camunda.png)  
+_Zugewiesene Usertasks für die GL_
 
+**Bearbeitung der Tasks durch die GL**:  
+Die Geschäftsleitung kann die Variablen überprüfen und eine Entscheidung treffen (Genehmigung oder Ablehnung). Hier ist der Usertask dargestellt, in dem die GL die Angaben evaluieren und den Antrag annehmen oder ablehnen kann.  
+![Evaluate Request](../../ressources/images/checkup_gl_camunda.png)  
+_Evaluierung der Angaben durch die Geschäftsleitung_
+
+**Bearbeitung abgelehnter Anträge**:  
+Falls die GL den Antrag ablehnt, wird automatisch ein weiterer Task erstellt, in dem die Daten angepasst werden müssen. Hier sieht man, wie die GL die Variablen aktualisiert.  
+![Adjust Variables](../../ressources/images/vars_usertask_adjust_gl_camunda.png)  
+_Anpassung der Daten durch die Geschäftsleitung_
+
+**Ergebnis nach der Benutzererstellung**:  
+Nach der erfolgreichen Erstellung des Benutzers und der Gruppen-Zuweisung werden neue Variablen hinzugefügt, die die Benutzerinformationen enthalten:
+
+- Benutzer ID
+- UserPrincipalName
+- Passwort
+
+![Returned variables](../../ressources/images/vars_after_creation_employee_camunda.png)  
+_Zurückgegebene Variablen nach der Benutzererstellung_
+
+**Timer Intermediate Event**:  
+Nach der Benutzererstellung pausiert der Prozess bis zum im Formular angegebenen Datum, das dem ersten Arbeitstag des neuen Mitarbeitenden entspricht. Der Timer wird korrekt mit dem eingegebenen Wert befüllt.  
+![Wait until Firstday](../../ressources/images/task_whait_until_first_day.png)  
+_Timer Intermediate Event mit Datum_
+
+---
 
 ### Scripts
 
-Die Scripts wurden mit PowerShell geschrieben und enthalten teilweise auch Python ausschnitte. 
-Beim Script wurde alles kommentiert, damit jeder versteht, für was, was steht. 
-Wie bereits in der [Improve Phase](./34_verbessern.md) erwähnt, werden die Skripte derzeit lokal auf dem Notebook ausgeführt, da es Probleme mit der Zertifikatsanmeldung am Camunda-Server gab. Um keine unnötige Zeit mit der Behebung dieses Problems zu verlieren, habe ich mich entschieden, die Skripte vorerst lokal zu starten. Sobald die Zertifikatsanmeldung gelöst ist, werde ich die Skripte entsprechend integrieren und anpassen.
+Die Automatisierung der Benutzererstellung und Gruppen-Zuweisung wurde mithilfe von PowerShell-Skripten umgesetzt. Diese Skripte wurden modular aufgebaut und sind vollständig kommentiert, um die Nachvollziehbarkeit zu gewährleisten.
 
-Das entsprechende Script kann unter folgendem Link eingesehen werden:
-- [MgGraph_User_Creation.ps1](https://github.com/Radball-Migi/HF-ITCNE24-SemArbeit2-BPMN-Personalprozess/blob/main/ressources/scripts/MgGraph_User_Creation.ps1)
-- [MgGraph_SP_adjust_permissions.ps1](https://github.com/Radball-Migi/HF-ITCNE24-SemArbeit2-BPMN-Personalprozess/blob/main/ressources/scripts/MgGraph_SP_adjust_permissions.ps1)
+**Verwendete Skripte:**
 
+- Benutzererstellung: [MgGraph_User_Creation.ps1](https://github.com/Radball-Migi/HF-ITCNE24-SemArbeit2-BPMN-Personalprozess/blob/main/ressources/scripts/MgGraph_User_Creation.ps1)
+- Anpassung der Berechtigungen: [MgGraph_SP_adjust_permissions.ps1](https://github.com/Radball-Migi/HF-ITCNE24-SemArbeit2-BPMN-Personalprozess/blob/main/ressources/scripts/MgGraph_SP_adjust_permissions.ps1)
+
+---
 
 ### Logs
 
-Damit wir die Fehler im System während dem Betrieb erkennen können, haben wir während der Asuführung ein Log, welches erstellt wird. 
-Der Speicherort ist ein Ordner, im `C:\temp`. 
-Die Files lauten:
-- `.\Personaleintritt\logs\user_creation-[Aktuelles Datum].log` 
-- `.\Personaleintritt\logs\sp_rights_customize-[Aktuelles Datum].log`
+Logs spielen eine wichtige Rolle bei der Fehlerdiagnose und Prozessüberwachung. Während der Skriptausführung werden automatisch Log-Dateien erstellt und gespeichert.
 
-![Logs](../../ressources/images/logfiles.png)
+**Speicherort der Logs:**
 
-*Log-Ablage*
+- `.\Personaleintritt\logs\user_creation-[Datum].log`
+- `.\Personaleintritt\logs\sp_rights_customize-[Datum].log`
 
-Die Logs sehen folgendermassen aus:
+**Screenshot der Log-Dateien:** ![Logs](../../ressources/images/logfiles.png)
 
-```Text
-********************************************
-MGGraph_User_Creation.ps1    -    2025-01-24
-********************************************
-
-2025-01-24 22:50:53: Starte FetchAndLock von Tasks...
-2025-01-24 22:50:53: FetchAndLock abgeschlossen.
-2025-01-24 22:50:53: Verarbeite Task ID: 90c4c2f8-da99-11ef-9510-0242ac110002
-2025-01-24 22:50:53: Hole Benutzerinformationen von Camunda...
-2025-01-24 22:50:53: Importiere Login-Informationen...
-2025-01-24 22:50:53: Login-Informationen von Local importieren
-2025-01-24 22:50:53: Login-Informationen erfolgreich importiert.
-2025-01-24 22:50:53: Verbindung mit Microsoft Graph wird hergestellt...
-2025-01-24 22:50:53: Verbindung mit Microsoft Graph erfolgreich
-2025-01-24 22:50:53: Erstelle neuen Benutzer...
-2025-01-24 22:50:53: Prüfe UPN...
-2025-01-24 22:50:53: UPN gefunden: Daniel.Mustermann1@iseschool2013.onmicrosoft.com
-2025-01-24 22:50:53: Erstelle neues Passwort...
-2025-01-24 22:50:53: Generiere Passwort...
-2025-01-24 22:50:53: Passwort erfolgreich generiert.
-2025-01-24 22:50:53: Evaluiere Department
-2025-01-24 22:50:53: Benutzer Mustermann, Daniel mit UPN Daniel.Mustermann1@iseschool2013.onmicrosoft.com erfolgreich erstellt.
-2025-01-24 22:50:53: Warte 3 Minuten...
-2025-01-24 22:53:53: Setze Manager...
-2025-01-24 22:53:53: Evaluiere Manager
-2025-01-24 22:53:54: Manager gefunden
-2025-01-24 22:53:54: Manager erfolgreich gesetzt
-2025-01-24 22:53:54: Schliesse Task ID: 90c4c2f8-da99-11ef-9510-0242ac110002 ab...
-2025-01-24 22:53:54: Task ID: 90c4c2f8-da99-11ef-9510-0242ac110002 erfolgreich abgeschlossen.
-2025-01-24 22:53:54: Task ID: 90c4c2f8-da99-11ef-9510-0242ac110002 abgeschlossen.
-2025-01-24 22:53:54: Starte FetchAndLock von Tasks...
-2025-01-24 22:53:54: FetchAndLock abgeschlossen.
-2025-01-24 22:53:54: Keine Tasks gefunden. Warte...
-```
-
-*Benutzererstellung*
+**Beispielhafte Log-Einträge:**
 
 ```Text
-****************************************************
-MgGraph_SP_adjust_permissions.ps1    -    2025-01-24
-****************************************************
-
-2025-01-24 22:54:53: Starte FetchAndLock von Tasks...
-2025-01-24 22:54:53: FetchAndLock abgeschlossen.
-2025-01-24 22:54:53: Verarbeite Task ID: b44a17eb-da9d-11ef-9510-0242ac110002
-2025-01-24 22:54:53: Hole Benutzerinformationen von Camunda...
-2025-01-24 22:54:53: Importiere Login-Informationen...
-2025-01-24 22:54:53: Login-Informationen von Local importieren
-2025-01-24 22:54:53: Login-Informationen erfolgreich importiert.
-2025-01-24 22:54:53: Verbindung mit Microsoft Graph wird hergestellt...
-2025-01-24 22:54:53: Setze Rechte für Rolle: gl
-2025-01-24 22:54:53: Rechte für gl gesetzt.
-2025-01-24 22:54:53: Setze Rechte für Rolle: ma
-2025-01-24 22:54:53: Rechte für ma gesetzt.
-2025-01-24 22:54:53: Schließe Task ID: b44a17eb-da9d-11ef-9510-0242ac110002 ab...
-2025-01-24 22:54:53: Task ID: b44a17eb-da9d-11ef-9510-0242ac110002 erfolgreich abgeschlossen.
-2025-01-24 22:54:53: Task ID: b44a17eb-da9d-11ef-9510-0242ac110002 abgeschlossen.
-2025-01-24 22:54:53: Starte FetchAndLock von Tasks...
-2025-01-24 22:54:53: FetchAndLock abgeschlossen.
-2025-01-24 22:54:53: Keine Tasks gefunden. Warte...
+2025-01-24 22:50:53: Benutzer Mustermann erfolgreich erstellt. 
+2025-01-24 22:53:54: Task abgeschlossen.
 ```
 
-*SharePoint-Zugriffsrechte vergeben*
-
-Zeitgleich wenn das Script ausgeführt wird, wird das Log auch im Terminal angezeigt. 
-
-![Output Script User-Creation](../../ressources/images/script_usercreation_output.png)
-
-*Output Script "MgGraph_User_Creation.ps1"*
-
-![Output SP-Rights-Adjust](../../ressources/images/script_sprights-adjust_output.png)
-
-*Output Script "MgGraph_SP_adjust_permissions.ps1"*
-
+---
 
 ### SharePoint
 
-Im SharePoint habe ich einigermassen ein Test Portal erstellt, welches und veranschaulichen soll, wie die Berechtigungen gesetzt werden. 
-Aus Sicherheitsgründen ist der Zugriff auf diesen SharePoint eingeschränkt und kann nur von mir genuzt werden. 
-An der Schlusspräsentation wird diesser ausschliesslich geziegt. 
-Grund dafür ist dass nur ich ein Login dafür habe und der SharePoint nach drausen geschützt ist. 
+Zur Validierung der Berechtigungen wurde ein SharePoint-Testportal eingerichtet. Die Berechtigungen werden basierend auf den zugewiesenen Rollen des Benutzers gesteuert.
 
-Nichts desto trotz Zeige ich in diesem Abschnitt auf, wie die Berechtigungen auf dem SharePoint greifen. 
+**Screenshots der Berechtigungen:**
 
-Wir haben auf dem SharePoint mehrere Berechtigungsgrppen, welche wie Script und Rollenzuweisung dem Benutzer hinzugefügt werden. 
-Anhand der jeweiligen Rolle, erhällt der Benutzer andere Berechtigungen. 
-Auf dem SharePoint gibt es insgesammt 5 Berechtigungen
-- Vollzugriff
-- Editor
-- Bearbeiten
-- Mitwirken 
-- Lesen
+- Berechtigungen auf der Website:  
+    ![SharePoint Website](../../ressources/images/sp_rights_website-permission.png)
+    
+- Berechtigungen auf einem Newsbeitrag:  
+    ![SharePoint News Beitrag](../../ressources/images/sp_rights_news_for_gl.png)
+    
 
-Vorallem wird der Vollzugriff, Bearbeiten, Mitwirken und Lesen verwendet.
-Der Unterschied zwischen Bearbeiten und Mitwirken ist, dass unter Mitwirken die Benutzer Listen oder Bibliotheken nicht auf einer Site Löschen können. 
-
-Um dies etwas verständlicher darzustellen, habe ich hier zwei Beispielesüberischten beigefügt, bei denne Sie die Berechtigungen auf der Site und auf einem Newsbeitrag sehen können. 
-Weiter unten stehen dann zwei Benutzer mit den Jeweils zugewiesenen Rollen. 
-
-![SharePoint Entra ID Groups](../../ressources/images/sp_rights_website-permission.png)
-
-*Berechtigungen auf der SharePoint Site*
-
-![SharePoint Entra ID Groups](../../ressources/images/sp_rights_news_for_gl.png)
-
-*Berechtigungen auf einem Newsbeitrag (Nur für die Rolle GL ersichtlich)*
-
-
-Hier haben wir einige Beispiele, welche ich mit zwei Benutzern getestet habe. 
-
-**Benutzer Daniel Musterhans** -> Rollen: MA, SB, SP
-
-![Website Permissions Daniel Musterhans](../../ressources/images/sp_rights_website-permission_check-rights_employee.png)
-
-*Berechtigungen auf der Website*
-
-![Element Permissions Daniel Musterhans](../../ressources/images/sp_rights_news_check-rights_no-rights.png)
-
-*Berechtigungen auf Newsbeitrag "Interne Mitteilung – Nur für die Geschäftsleitung"* 
-<br>
-
-**Benutzer Daniel Mustermann** -> Rollen: GL, MA
-
-![Website Permissions Daniel Musterhans](../../ressources/images/sp_rights_website-permission_check-rights.png)
-
-*Berechtigungen auf der Website*
-
-![Element Permissions Daniel Musterhans](../../ressources/images/sp_rights_news_check-rights_edit-rights.png)
-
-*Berechtigungen auf Newsbeitrag "Interne Mitteilung – Nur für die Geschäftsleitung"* 
-
+---
 
 ### Entra ID
 
-Über das Entra-ID (Ehemals Azure AD), läuft die gesammte User und Gruppenverwaltung. 
+Die Benutzer- und Gruppenverwaltung wurde über Entra ID (ehemals Azure AD) realisiert. Mithilfe der Skripte werden Benutzer erstellt, Lizenzen zugewiesen und Gruppenmitgliedschaften verwaltet.
 
-Mit hilfe von den beiden Scripts, erstellen wir einen Benutzer, fügen diesen die Lizenzgruppe hinzu und auch anhand seiner Rollen, in die jeweilige SharePoint Gruppe. 
+**Screenshots in Entra ID:**
 
-Mit dem ersten Script erstellen wir den Benutzer mit allen Daten.
+- Benutzereigenschaften:  
+    ![User Props](../../ressources/images/entra-id_user_props.png)
+    
+- Zugehörige Gruppen:  
+    ![Groups of the user](../../ressources/images/entra-id_groups_of_user.png)
+    
 
-![User Props](../../ressources/images/entra-id_user_props.png)
+---
 
-*Benutzereigenschaften* 
+## Fazit zur Control-Phase
 
-![Licence Group](../../ressources/images/entra-id_user_licence.png)
+Die Control-Phase hat nachgewiesen, dass der Personalprozess stabil und zuverlässig funktioniert. Durch umfassende Tests konnte sichergestellt werden, dass alle Kernkomponenten – von der Benutzererstellung bis zur Gruppen- und Lizenzverwaltung – einwandfrei arbeiten.
 
-*Lizenzzuweisung via Gruppe* 
-
-![Groups of the user](../../ressources/images/entra-id_groups_of_user.png)
-
-*Gruppen des Benutzers*
-
+Trotz anfänglicher Herausforderungen, wie Problemen mit dem Datumsfeld und der lokalen Skriptausführung, wurde eine tragfähige Lösung entwickelt. Die nächste Phase sieht eine Migration auf Azure vor, um die Skalierbarkeit und Sicherheit weiter zu verbessern.
