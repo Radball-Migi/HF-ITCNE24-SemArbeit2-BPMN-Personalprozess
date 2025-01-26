@@ -18,47 +18,47 @@ Bild mit KI generiert (<a href="https://copilot.cloud.microsoft/" target="_blank
 ___ 
 ### Einleitung
 
-#### Ausgangslage
+#### **Ausgangslage**
 Bild mit KI generiert (<a href="https://copilot.cloud.microsoft/" target="_blank">Microsoft Copilot</a>)
 #### **Ziele**
 <a href="https://www.flaticon.com/free-icon/goals_10605945?term=goal&related_id=10605945" target="_blank">Flaticon</a> 
-#### Kanban
+#### **Kanban**
 <a href="https://ifm-business.de/aktuelles/business-news/kanban-prozesse-visualisieren-und-verbessern.html" target="_blank">ifm-business.de</a> 
-#### Scrum
+#### **Scrum**
 <a href="https://vlbs.nrw/event/scrum-agiles-lernen/" target="_blank">vlbs.nrw</a> 
-#### Kanban und Scrum 
+#### **Kanban und Scrum**
 <a href="https://unichrone.com/blog/agile/kanban-vs-scrum/" target="_blank">Unichrone.com</a>
-#### Six Sigma
+#### **Six Sigma**
 <a href="https://www.flaticon.com/free-icon/methodology_13063040?term=six+sigma&page=1&position=36&origin=search&related_id=13063040" target="_blank">Flaticon</a> 
 
 ___ 
 ### Hauptteil
 Bild mit KI generiert (<a href="https://copilot.cloud.microsoft/" target="_blank">Microsoft Copilot</a>) 
-#### Define Phase
+#### **Define Phase**
 <a href="https://www.flaticon.com/free-icon/define_12642154?term=define&page=1&position=47&origin=search&related_id=12642154" target="_blank">Flaticon</a>
-#### Measure Phase
+#### **Measure Phase**
 <a href="https://www.flaticon.com/free-icon/lean_9464400?term=measure+process&related_id=9464400" target="_blank">Flaticon</a>
-#### Analyze Phase
+#### **Analyze Phase**
 <a href="https://www.flaticon.com/free-icon/analysis_18517653?term=evaluation+and+analysis&page=1&position=55&origin=search&related_id=18517653" target="_blank">Flaticon</a>
-#### Improve Phase 
+#### **Improve Phase**
 <a href="https://www.flaticon.com/free-icon/improvement_3930474?term=improve&related_id=3930474" target="_blank">Flaticon</a>
-##### Camunda Logo
+#### **Camunda Logo**
 <a href="https://camunda.com/brand/" target="_blank">Camunda</a>
-#### Control Phase
+#### **Control Phase**
 <a href="https://www.flaticon.com/free-icon/security_6310151?term=control&page=1&position=6&origin=search&related_id=6310151" target="_blank">Flaticon</a>
 
 ___ 
 ### Sprints
 
-#### Sprint Review
+#### **Sprint Review**
 <a href="https://online.visual-paradigm.com/de/illustrations/templates/agile-illustration/sprint-review/" target="_blank">https://online.visual-paradigm.com</a>
 
 ___ 
 ### Abschluss
 <a href="https://www.flaticon.com/free-icon/search_3281329?term=check&related_id=3281329&origin=search" target="_blank">Flaticon</a>
-#### Erreichte Ziele
+#### **Erreichte Ziele**
 <a href="https://www.flaticon.com/free-icon/reach-goal_12492473?term=reached+goals&page=1&position=23&origin=search&related_id=12492473" target="_blank">Flaticon</a>
-#### Erkenntnisse
+#### **Erkenntnisse**
 <a href="https://www.flaticon.com/free-icon/experience_16405358?term=experiance&page=1&position=47&origin=search&related_id=16405358" target="_blank">Flaticon</a>
 
 ___ 
