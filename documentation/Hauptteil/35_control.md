@@ -24,19 +24,20 @@ Die Testing-Phase war entscheidend, um die Funktionalität, Stabilität und Zuve
 
 ### Testmatrix
 
-|**Test-ID**|**Was wird getestet?**|**Zweck / Ziel**|**Erwartetes Ergebnis**|**Effektives Ergebnis**|**Dokumentation / Link**|
-|---|---|---|---|---|---|
-|T01|Erfassung neuer Mitarbeiter via HTML-Formular|Wird beim Absenden des Forms alles via API mit gesendet?|Beim Absenden des Formulars erscheint die Meldung "Erfolgreich".|Erfolgreich|[Dokumentation](#)|
-|T02|Datenübertragung und Start der Prozessinstanz|Prozessinstanz wird gestartet und die Daten aus dem Formular an den Prozess übergeben|Prozessinstanz wird gestartet, Variablen sind sichtbar in den Tasks|Erfolgreich|[Dokumentation](#)|
-|T03|Übernahme der Tasks und Bestätigung des Genehmigungsantrags|Funktioniert die Taskübernahme und das Exclusive Gateway korrekt?|Task kann übernommen und bearbeitet werden.  <br>Nach Annahme wird ein Signal gesendet.|Erfolgreich|[Dokumentation](#)|
-|T04|Benutzererstellung wird gestartet und läuft erfolgreich durch.|Wird der Benutzer erstellt und korrekt den Gruppen sowie der Lizenz zugewiesen?|Benutzer wird mit vollständigen Eigenschaften (Abteilung, Manager) erstellt.|Erfolgreich|[Dokumentation](#)|
-|T05|Gruppenzuweisung via Script|Wird der Benutzer anhand seiner Rollen korrekt den Entra-ID-Gruppen zugewiesen?|Benutzer wird korrekt in die Entra-ID-Gruppen hinzugefügt.|Erfolgreich|[Dokumentation](#)|
-|T06|Timer Intermediate Event|Triggert das Timer Event korrekt zum im Formular angegebenen Datum?|Der Timer verwendet den korrekten Datumswert aus dem Formular.|Erfolgreich||
-|T07|Logs|Werden die Logs im vorgegebenen Pfad erstellt?|Logs werden unter `C:\temp\Personaleintritt` korrekt erstellt.|Erfolgreich|[Logs](#logs)|
-|T08|Camunda Server|Ist der Docker-Container für den Camunda Server vorhanden und läuft dieser stabil?|Der Container ist aktiv und der Server funktioniert einwandfrei.|Erfolgreich|[Camunda Server](#camunda-server)|
+| **Test-ID** | **Was wird getestet?**                                         | **Zweck / Ziel**                                                                      | **Erwartetes Ergebnis**                                                                 | **Effektives Ergebnis**                                                           | **Dokumentation / Link**                           |
+| ----------- | -------------------------------------------------------------- | ------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------- | -------------------------------------------------- |
+| T01         | Erfassung neuer Mitarbeiter via HTML-Formular                  | Wird beim Absenden des Forms alles via API mit gesendet?                              | Beim Absenden des Formulars erscheint die Meldung "Erfolgreich".                        | Statusmeldung "Erfolgreich" erscheint.                                            | [Formular](#formular)                              |
+| T02         | Datenübertragung und Start der Prozessinstanz                  | Prozessinstanz wird gestartet und die Daten aus dem Formular an den Prozess übergeben | Prozessinstanz wird gestartet, Variablen sind sichtbar in den Tasks                     | Prozessinstanz wurde gestartet und die Variablen sind sichtbar im Cockpit         | [Camunda Cockpit](#camunda-cockpit)                |
+| T03         | Übernahme der Tasks und Bestätigung des Genehmigungsantrags    | Funktioniert die Taskübernahme und das Exclusive Gateway korrekt?                     | Task kann übernommen und bearbeitet werden.  <br>Nach Annahme wird ein Signal gesendet. | GL kann den Task übernehmen & an oder ablehnen.                                   | [Camunda Cockpit](#camunda-cockpit)                |
+| T04         | Benutzererstellung wird gestartet und läuft erfolgreich durch. | Wird der Benutzer erstellt und korrekt den Gruppen sowie der Lizenz zugewiesen?       | Benutzer wird mit vollständigen Eigenschaften (Abteilung, Manager) erstellt.            | Benutzer wurde im Entra ID erstellt                                               | [Entra ID](#entra-id)                              |
+| T05         | Gruppenzuweisung via Script                                    | Wird der Benutzer anhand seiner Rollen korrekt den Entra-ID-Gruppen zugewiesen?       | Benutzer wird korrekt in die Entra-ID-Gruppen hinzugefügt.                              | Benutzer wurde anhand der Rollen in die Gruppen hinzugefügt                       | [Entra ID](#entra-id)<br>[SharePoint](#sharepoint) |
+| T06         | Timer Intermediate Event                                       | Triggert das Timer Event korrekt zum im Formular angegebenen Datum?                   | Der Timer verwendet den korrekten Datumswert aus dem Formular.                          | Definiertes Datum ist auf dem Event hinterlegt                                    | [Camunda Cockpit](#camunda-cockpit)                |
+| T07         | Logs                                                           | Werden die Logs im vorgegebenen Pfad erstellt?                                        | Logs werden unter `C:\temp\Personaleintritt\logs` korrekt erstellt.                     | Logs Werden unter dem Pfad `C:\temp\Personaleintritt\logs` erstellt und abgelegt. | [Logs](#logs)                                      |
+| T08         | Camunda Server                                                 | Ist der Docker-Container für den Camunda Server vorhanden und läuft dieser stabil?    | Der Container ist aktiv und der Server funktioniert einwandfrei.                        | Der Server konnte erstellt werden und funktioniert                                | [Camunda Server](#camunda-server)                  |
 
 **Hinweise zur Testmatrix:**
 
+- Je nach Ansicht, wird die Testmatrix nicht komplett angezeigt.
 - **Test-ID:** Dient zur eindeutigen Identifikation und Referenzierung der Tests.
 - **Dokumentation / Link:** Verweist auf die zugehörige Dokumentation, BPMN-Diagramme oder spezifische Bereiche im Repository.
 
@@ -69,7 +70,11 @@ docker run -d --name ITCNE-SEMAR2-CAMSRV -p 8080:8080 camunda/camunda-bpm-platfo
 
 Das ursprünglich verwendete Camunda-Formular wurde aufgrund von Problemen mit dem Datumsfeld in ein HTML-Formular umgeschrieben. Dieses HTML-Formular konnte die Anforderungen vollständig erfüllen und ist inzwischen stabil.
 
-**Screenshot des ausgefüllten Formulars:** ![Formular](../../ressources/images/form_filled_out.png)
+**Screenshot des ausgefüllten Formulars:** 
+![Formular](../../ressources/images/form_filled_out.png)
+
+**Statusmeldung beim versenden:**
+![Statusmeldung Form](../../ressources/images/message_send_form.png)
 
 #### **BPMN-Diagramme**
 
@@ -149,7 +154,17 @@ Logs spielen eine wichtige Rolle bei der Fehlerdiagnose und Prozessüberwachung.
 
 **Screenshot der Log-Dateien:** ![Logs](../../ressources/images/logfiles.png)
 
-**Beispielhafte Log-Einträge:**
+**Beispiel Log Header**
+
+```Text
+****************************************************
+MgGraph_SP_adjust_permissions.ps1    -    2025-01-24
+****************************************************
+
+2025-01-24 22:54:53: Starte FetchAndLock von Tasks...
+```
+
+**Beispiel Log-Einträge:**
 
 ```Text
 2025-01-24 22:50:53: Benutzer Mustermann erfolgreich erstellt. 
@@ -164,12 +179,34 @@ Zur Validierung der Berechtigungen wurde ein SharePoint-Testportal eingerichtet.
 
 **Screenshots der Berechtigungen:**
 
-- Berechtigungen auf der Website:  
-    ![SharePoint Website](../../ressources/images/sp_rights_website-permission.png)
+- Berechtigungen auf der Website:
+	
+	![SharePoint Website](../../ressources/images/sp_rights_website-permission.png)
     
-- Berechtigungen auf einem Newsbeitrag:  
-    ![SharePoint News Beitrag](../../ressources/images/sp_rights_news_for_gl.png)
+- Berechtigungen auf einem Newsbeitrag:
+      ![SharePoint News Beitrag](../../ressources/images/sp_rights_news_for_gl.png)
     
+
+**Vergleich zweier Benutzer auf dem SharePoint:**
+
+- **Benutzer Daniel Musterhans** -> Rollen: MA, SB, SP
+	
+	![Website Permissions Daniel Musterhans](../../ressources/images/sp_rights_website-permission_check-rights_employee.png)
+	_Berechtigungen auf der Website_
+	
+	![Element Permissions Daniel Musterhans](../../ressources/images/sp_rights_news_check-rights_no-rights.png)
+	_Berechtigungen auf Newsbeitrag "Interne Mitteilung – Nur für die Geschäftsleitung"_
+
+
+- **Benutzer Daniel Mustermann** -> Rollen: GL, MA
+	
+	![Website Permissions Daniel Musterhans](../../ressources/images/sp_rights_website-permission_check-rights.png)
+	_Berechtigungen auf der Website_
+	
+	![Element Permissions Daniel Musterhans](../../ressources/images/sp_rights_news_check-rights_edit-rights.png)
+	_Berechtigungen auf Newsbeitrag "Interne Mitteilung – Nur für die Geschäftsleitung"_
+
+
 
 ---
 
@@ -180,12 +217,23 @@ Die Benutzer- und Gruppenverwaltung wurde über Entra ID (ehemals Azure AD) real
 **Screenshots in Entra ID:**
 
 - Benutzereigenschaften:  
-    ![User Props](../../ressources/images/entra-id_user_props.png)
+	
+	![User Props](../../ressources/images/entra-id_user_props.png)
     
 - Zugehörige Gruppen:  
-    ![Groups of the user](../../ressources/images/entra-id_groups_of_user.png)
+	
+	![Groups of the user](../../ressources/images/entra-id_groups_of_user.png)
     
+- Lizenz Zuweisung:
+	
+	![Lizenz Zuweisung](../../ressources/images/entra-id_user_licence.png)
+	
+- Gruppenzuweisung des Benutzers 
+	
+	![Groups of the user](../../ressources/images/entra-id_groups_of_user.png)
+	
 
+  
 ---
 
 ## Fazit zur Control-Phase
