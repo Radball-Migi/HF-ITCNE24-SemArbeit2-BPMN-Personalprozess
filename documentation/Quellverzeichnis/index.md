@@ -59,6 +59,9 @@ Bild mit KI generiert (<a href="https://copilot.cloud.microsoft/" target="_blank
 ## Hilfsmittel
 
 
+### Chat GPT / Microsoft Copilot
+<a href="[ChatGPT](https://chatgpt.com/)" target="_blank">Chat GPT</a>
+<a href="https://copilot.cloud.microsoft/" target="_blank">Microsoft Copilot</a>
 
 ### Camunda Symbole
 <a href="https://bpm-conference.org/assets/docs/bpmn-poster/BPMN2_0_Poster_DE.pdf" target="_blank">BPMN Poster</a>

@@ -213,6 +213,9 @@ Die Namen der Gruppen sind wie folgt aufgebaut:
 - **`SP`**: Abkürzung für SharePoint.
 - **Rolle**: Die jeweilige Funktion oder Abteilung, wie z. B. GL (Geschäftsleitung) oder MA (Mitarbeitende).
 
+![SP Gruppen](../../ressources/images/entra-id_all_groups.png)
+*SharePoint & Lizenz Gruppe*
+
 Diese Struktur stellt sicher, dass Berechtigungen nachvollziehbar und konsistent verwaltet werden können. Durch die zentrale Verwaltung in Entra ID werden Änderungen effizient und ohne zusätzlichen administrativen Aufwand auf alle SharePoint-Sites angewendet.
 
 ___ 
