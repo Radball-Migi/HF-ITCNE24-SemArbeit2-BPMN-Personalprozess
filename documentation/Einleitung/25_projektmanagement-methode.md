@@ -2,7 +2,7 @@
 layout: default
 title: 2.5 Projektmanagement-Methode
 parent: 2. Einleitung
-nav_order: 6
+nav_order: 7
 ---
 
 # Projektmanagement-Methode

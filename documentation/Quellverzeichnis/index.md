@@ -15,6 +15,7 @@ has_children: "false"
 ### Startseite
 Bild mit KI generiert (<a href="https://copilot.cloud.microsoft/" target="_blank">Microsoft Copilot</a>) 
 
+___ 
 ### Einleitung
 
 #### Ausgangslage
@@ -30,6 +31,7 @@ Bild mit KI generiert (<a href="https://copilot.cloud.microsoft/" target="_blank
 #### Six Sigma
 <a href="https://www.flaticon.com/free-icon/methodology_13063040?term=six+sigma&page=1&position=36&origin=search&related_id=13063040" target="_blank">Flaticon</a> 
 
+___ 
 ### Hauptteil
 Bild mit KI generiert (<a href="https://copilot.cloud.microsoft/" target="_blank">Microsoft Copilot</a>) 
 #### Define Phase
@@ -45,12 +47,19 @@ Bild mit KI generiert (<a href="https://copilot.cloud.microsoft/" target="_blank
 #### Control Phase
 <a href="https://www.flaticon.com/free-icon/security_6310151?term=control&page=1&position=6&origin=search&related_id=6310151" target="_blank">Flaticon</a>
 
-
+___ 
 ### Sprints
 
 #### Sprint Review
 <a href="https://online.visual-paradigm.com/de/illustrations/templates/agile-illustration/sprint-review/" target="_blank">https://online.visual-paradigm.com</a>
 
+___ 
+### Abschluss
+<a href="https://www.flaticon.com/free-icon/search_3281329?term=check&related_id=3281329&origin=search" target="_blank">Flaticon</a>
+#### Erreichte Ziele
+<a href="https://www.flaticon.com/free-icon/reach-goal_12492473?term=reached+goals&page=1&position=23&origin=search&related_id=12492473" target="_blank">Flaticon</a>
+#### Erkenntnisse
+<a href="https://www.flaticon.com/free-icon/experience_16405358?term=experiance&page=1&position=47&origin=search&related_id=16405358" target="_blank">Flaticon</a>
 
 ### Quellverzeichnis-Logo
 <a href="https://www.flaticon.com/free-icon/data-source_5865926?term=source&related_id=5865926" target="_blank">Flaticon</a> 

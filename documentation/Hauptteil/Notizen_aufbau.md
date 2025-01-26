@@ -1,5 +1,8 @@
 # Notizen zum Aufbau für Doku
 
+Dies ist eine Seite, welche für Notizen genutzt wurde. 
+
+
 Camunda Server API: [Camunda Platform REST API](http://localhost:8080/swaggerui/)
 
 
@@ -161,7 +164,7 @@ AzureAppId/ClientId    : 058839a7-a056-47ad-8bf9-f56f230c6207
 
 ```
 
-Instll der Module: 
+Install der Module: 
 
 ```PowerShell
 # PowerShell-Skript zum Herunterladen, Installieren und Importieren der benötigten Microsoft Graph Module auf CAmunda docker container

@@ -9,6 +9,7 @@ nav_order: 8
 Die Control-Phase ist der fünfte und letzte Schritt in einem Six Sigma Projekt. In dieser Phase werden die in der Improve-Phase implementierten Lösungen überwacht und kontrolliert, um sicherzustellen, dass die Verbesserungen nachhaltig sind und die Prozessleistung stabil bleibt. Ziel ist es, die erzielten Verbesserungen zu standardisieren und in den täglichen Betrieb zu integrieren.
 
 ![control](../../ressources/images/control.png)
+
 [Quelle](../Quellverzeichnis/index.md#control-phase) 
 
 
@@ -192,18 +193,22 @@ Zur Validierung der Berechtigungen wurde ein SharePoint-Testportal eingerichtet.
 - **Benutzer Daniel Musterhans** -> Rollen: MA, SB, SP
 	
 	![Website Permissions Daniel Musterhans](../../ressources/images/sp_rights_website-permission_check-rights_employee.png)
+	
 	_Berechtigungen auf der Website_
 	
 	![Element Permissions Daniel Musterhans](../../ressources/images/sp_rights_news_check-rights_no-rights.png)
+	
 	_Berechtigungen auf Newsbeitrag "Interne Mitteilung – Nur für die Geschäftsleitung"_
 
 
 - **Benutzer Daniel Mustermann** -> Rollen: GL, MA
 	
 	![Website Permissions Daniel Musterhans](../../ressources/images/sp_rights_website-permission_check-rights.png)
+	
 	_Berechtigungen auf der Website_
 	
 	![Element Permissions Daniel Musterhans](../../ressources/images/sp_rights_news_check-rights_edit-rights.png)
+	
 	_Berechtigungen auf Newsbeitrag "Interne Mitteilung – Nur für die Geschäftsleitung"_
 
 
