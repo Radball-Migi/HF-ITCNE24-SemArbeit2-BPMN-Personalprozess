@@ -11,3 +11,4 @@ Im Kapitel "Abschluss" werde ich eine ausführliche Reflexion meiner im Rahmen d
 
 ![Abschluss](../../ressources/images/abschluss.png)
 
+[Quelle](../Quellverzeichnis/index.md#abschluss) 

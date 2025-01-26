@@ -85,7 +85,10 @@ Derzeit wird der Container lokal betrieben. Langfristig ist jedoch geplant, ihn 
 Diese Lösung schafft eine robuste Basis für die Prozessautomatisierung und verbessert sowohl die Benutzererfahrung als auch die langfristige Wartbarkeit.
 
 ### REST API – Camunda Platform REST API
-Um Prozesse effizient zu steuern, wird die [**Camunda Platform REST API**](http://localhost:8080/swaggerui/) verwendet. Diese Schnittstelle ermöglicht:
+Um Prozesse effizient zu steuern, wird die [**Camunda Platform REST API**](http://localhost:8080/swaggerui/) verwendet. 
+_(Die API funktioniert nur wenn auch der Camunda Server läuft)_
+
+Diese Schnittstelle ermöglicht:
 
 - Das Auslösen von Ereignissen.
 - Die direkte Steuerung von Prozessen.

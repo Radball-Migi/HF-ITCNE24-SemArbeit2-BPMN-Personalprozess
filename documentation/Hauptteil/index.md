@@ -11,7 +11,7 @@ Wie genau der DMAIC-Zyklus abläuft, wurde bereits in der Einleitung unter dem [
 
 ![BPMN](../../ressources/images/bpmn.png)
 
-[Quelle](../Quellverzeichnis/index.md)
+[Quelle](../Quellverzeichnis/index.md#hauptteil)
 
 
 

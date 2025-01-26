@@ -5,40 +5,41 @@ parent: 4. Sprints
 nav_order: 5
 ---
 
-# Besprechung BPMN 23.12.2024
+## Besprechung BPMN 23.12.2024
 
-Besprechung mit Thomas betreffend Problemen mit BPMN
-Nach Rückspreche mit Thomas, hatten wir für den 23.12.2024 einen Termin, um einige Probleme im BPMN miteinander anzuschauen. 
-Wie ich auch bereits im [2. Sprint](./sprint2_13-12-2024.md) erwähnt habe, gab es Probleme:
-- Starten des Prozesses über Camunda ging nicht.
-- Probleme mit dem Form. 
-- Prozessabfrage mit Script ging nicht. 
+Am 23.12.2024 hatte ich eine Besprechung mit Thomas, um Probleme im Zusammenhang mit BPMN zu klären. Wie ich bereits im [2. Sprint](./sprint2_13-12-2024.md) erwähnt hatte, gab es einige Schwierigkeiten, die gelöst werden mussten:
 
-Beim Gespräch konnte mir Thomas gleich weiterhelfen. 
-Meine Fehler waren, beim Starten des Prozesses, hatte ich den falschen Start hinterlegt. 
-Der Fehler lag an der Art, wie der Prozess gestartet werden soll. 
-Zuerst hatte ich beim Start, beim Mitarbeitenden, Zwischenereignis drin anstelle eines Startevents. 
-Des weiteren musste ich einen Zusätzlichen Prozess erstellen, für das Camunda selbst. 
-Der Eintrittsprozess ist aktuell noch vermehrt abhängig von der Geschäftsleitung, weshalb es vorher und nachher einige Tasks gibt, welche von ihnen ausgeführt werden. 
-Für den Prozess, welcher Camunda ausführt, habe ich nun einen eigenen Prozess erstellt, welcher nur für die Erfassung des Benutzers ersichtlich ist. 
-[Siehe auf der Seite "Verbessern (Improve) Phase"](../Hauptteil/34_verbessern.md). 
+1. Der Prozess liess sich über Camunda nicht starten.
+2. Es traten Probleme mit dem Formular auf.
+3. Die Prozessabfrage über ein Script funktionierte nicht.
 
-Beim Form gab es Probleme mit dem Datumsfeld, welches als Required hinterlegt wurde aber als ich Daten eingefügt habe, wurde mir ein Fehler angezeigt, dass ich das Feld ausfüllen soll. 
-Als wir dann das Feld nicht Required hinterlegt haben, gab es den Fehler nicht aber auch wenn ich ein Datum hinterlege, wird die Variabel nicht abgefüllt. 
+### Problemlösungen im Gespräch
 
-Thomas geht dem nach, weshalb es als Required den Fehler produziert. 
+#### Start des Prozesses
 
-Beim Testen des Prozesses gab es zwei weitere Fehler, einerseits die MessageRefs und die Scriptstasks. 
+Thomas konnte mir beim Startproblem direkt helfen. Der Fehler lag daran, dass ich das falsche Startereignis hinterlegt hatte. Anstatt eines Startevents hatte ich ein Zwischenergebnis für Mitarbeitende gesetzt. Zudem musste ich für Camunda einen zusätzlichen Prozess erstellen, der ausschliesslich für das System selbst bestimmt ist.
 
-Gegen die MessageRefs-Errors, haben wir die Ereignisse auf normale Zwischenerreignisse umgestellt.
+Ein weiterer Punkt war die Abhängigkeit des Eintrittsprozesses von der Geschäftsleitung. Es gibt mehrere Tasks, die vor und nach dem Prozess von der Geschäftsleitung ausgeführt werden. Um dies besser zu strukturieren, habe ich einen separaten Prozess erstellt, der lediglich für die Erfassung des Benutzers sichtbar ist. Details dazu sind auf der Seite [„Verbessern (Improve) Phase“](../Hauptteil/35_verbessern.md) dokumentiert.
 
-Bei den Scripttasks hat mit Thomas erklärt, dass wir hier einen ServiceTask erstellen müssen, da leider bei Scripttasks das PowerShell nicht findet. 
-Beim ServiceTask, hat er mir auf seinem Gitlab ein Beispiel gezeigt, wie ich den Task abfragen kann und so mein Script ausgelöst werden kann. 
+#### Formularprobleme
 
-Thomas hat mir heute sehr viel gezeigt, woraus ich nun weiter lernen und auch profitieren kann. 
-Ich werde dies weiter in den Script berücksichtigen und am Ende wird es hoffentlich klappen. 
-Für das Weitere vorherkommen, muss ich nun schauen, wie ich das PowerShell in den Camunda Container hinzufügen kann. 
-Dies und das Datumsfeld, wird mich in den Weihnachtsferien auf trapp halten. 
+Das Formular hatte Probleme mit einem Datumsfeld, das als Pflichtfeld (`required`) definiert war. Obwohl ich Daten in das Feld eingab, erhielt ich die Fehlermeldung, dass das Feld ausgefüllt werden müsse. Nachdem wir das Pflichtfeld-Attribut entfernt hatten, trat der Fehler nicht mehr auf, allerdings wurde die Variable weiterhin nicht korrekt befüllt, selbst wenn ich ein Datum eingab.
 
+Thomas untersucht nun, warum das Datumsfeld bei Aktivierung des Pflichtfelds diesen Fehler produziert.
 
+#### Fehler beim Testen des Prozesses
 
+Beim Testen des Prozesses stiessen wir auf zwei weitere Probleme:
+
+1. **MessageRefs-Fehler:**  
+    Hier lag der Fehler in den MessageRefs-Ereignissen. Um dieses Problem zu beheben, haben wir die Ereignisse auf normale Zwischenereignisse umgestellt.
+    
+2. **ScriptTasks:**  
+    Bei den ScriptTasks gab es das Problem, dass PowerShell nicht korrekt gefunden wurde. Thomas erklärte mir, dass ich stattdessen ServiceTasks verwenden sollte. Er zeigte mir ein Beispiel auf seinem GitLab, wie ich den Task abfragen und damit das Script korrekt auslösen kann.
+    
+
+### Fazit und Ausblick
+
+Thomas hat mir in dieser Besprechung viele wertvolle Einblicke gegeben, aus denen ich nun weiter lernen und profitieren kann. Ich werde diese Erkenntnisse in meinen Scripten berücksichtigen und hoffe, dass ich am Ende eine funktionierende Lösung entwickeln kann.
+
+Als Nächstes muss ich mich darum kümmern, wie ich PowerShell in den Camunda-Container integrieren kann. Zusätzlich werde ich weiterhin an der Lösung für das Datumsfeld arbeiten. Diese Aufgaben werden mich während der Weihnachtsferien auf Trab halten, aber ich bin zuversichtlich, dass ich gute Fortschritte machen werde.

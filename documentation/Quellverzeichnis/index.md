@@ -64,13 +64,19 @@ ___
 ### Quellverzeichnis-Logo
 <a href="https://www.flaticon.com/free-icon/data-source_5865926?term=source&related_id=5865926" target="_blank">Flaticon</a> 
 
-
+___ 
 ## Hilfsmittel
 
+### Six Sigma
+<a href="https://asana.com/de/resources/six-sigma" target="_blank">Six Sigma: Grundsätze und Best Practices! [2024] • Asana</a>
+
+### Camunda-BPMN
+<a href="https://www.hanser-elibrary.com/doi/epdf/10.3139/9783446461123.fm" target="_blank">Praxishandbuch BPMN</a>
+
+### Camunda Symbole
+<a href="https://bpm-conference.org/assets/docs/bpmn-poster/BPMN2_0_Poster_DE.pdf" target="_blank">BPMN Poster</a>
 
 ### Chat GPT / Microsoft Copilot
 <a href="[ChatGPT](https://chatgpt.com/)" target="_blank">Chat GPT</a>
 <a href="https://copilot.cloud.microsoft/" target="_blank">Microsoft Copilot</a>
 
-### Camunda Symbole
-<a href="https://bpm-conference.org/assets/docs/bpmn-poster/BPMN2_0_Poster_DE.pdf" target="_blank">BPMN Poster</a>
