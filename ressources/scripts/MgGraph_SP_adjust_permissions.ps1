@@ -107,7 +107,7 @@ function Complete-Task {
 function Import-Login {
     Write-Log -Message "Importiere Login-Informationen..." -LogStatus "Info"
 
-    $TestPath = "/tmp/scripts/Logininfos_camundacontainer1.json" # Testpath for Request get false
+    $TestPath = "/tmp/scripts/Logininfos_camundacontainer1.json" # Written incorrectly so that it is not found, since script is currently running locally but later in the container
     $PathCamundaContainer = "/tmp/scripts/Logininfos_camundacontainer.json"
     $PathLocal = "./Logininfos_local.json"
     
