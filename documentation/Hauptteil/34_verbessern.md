@@ -179,6 +179,10 @@ In meinem Projekt verwende ich **zwei Service Tasks**, um technische Aufgaben im
 
 > Die Skripte werden derzeit lokal auf dem Notebook ausgeführt, da es Probleme mit der Zertifikatsanmeldung auf dem Camunda-Server gab. Um keine unnötige Zeit mit der Behebung dieses Problems zu verlieren, habe ich mich entschieden, die Skripte vorerst lokal zu starten. Sobald die Zertifikatsanmeldung gelöst ist, werde ich die Skripte entsprechend integrieren und anpassen.
 
+>Bei beiden Skripts wurde ein Teil von Thomas Skriptvorlage übernommen, welche die Abfrage des Tasks durchführt. Alles andere an den Scripts wurde selbst geschrieben.
+>Link zum Skript: [ExternalTask_DoWork.ps1 by Thomas Kälin](https://gitlab.com/ch-tbz-it/Stud/m254/-/blob/main/Unterlagen/Camunda7/Beispiele/Aufg_ExternalTask/ExternalTask_DoWork.ps1) 
+>Dieser Skriptausschnitt wurde im Gespräch mit Thomas angeschaut und zur Übernahme freigegeben.
+
 <br>
 
 #### **SharePoint**
