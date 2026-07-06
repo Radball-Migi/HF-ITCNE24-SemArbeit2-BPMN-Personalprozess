@@ -28,3 +28,4 @@ Mit diesem Board, kann ich auch eine Zeitplan-Achse abbilden, wo ich die Dauer e
 
 Den Zeitplan in Github Project, kannst du unter diesem Link finden: <a href="https://github.com/users/Radball-Migi/projects/3" target="_blank">Github Project</a>
 
+

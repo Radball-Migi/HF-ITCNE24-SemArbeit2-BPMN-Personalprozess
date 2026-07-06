@@ -1,14 +1,35 @@
 apiVersion: backstage.io/v1alpha1
 kind: Component
+
 metadata:
-  name: HF-ITCNE24-SemArbeit2-BPMN-Personalprozess
-  description: Personaleintrittsprozess Verbessert
+  name: hf-itcne24-semarbeit2-bpmn-personalprozess
+  title: Personalprozess BPMN
+  description: Personaleintrittsprozess mittels BPMN
+
   tags:
     - bpmn
-    - python
-    - camunda
+    - personal-process
+    - onboarding
     - mg-graph
+    - camunda
+
+  annotations:
+    github.com/project-slug: Radball-Migi/HF-ITCNE24-SemArbeit2-BPMN-Personalprozess
+    backstage.io/source-location: url:https://github.com/Radball-Migi/HF-ITCNE24-SemArbeit2-BPMN-Personalprozess
+    backstage.io/techdocs-ref: url:https://github.com/Radball-Migi/HF-ITCNE24-SemArbeit2-BPMN-Personalprozess/tree/main
+    backstage.io/kubernetes-id: hf-itcne24-semarbeit2-bpmn-personalprozess
+
+  links:
+    - url: https://github.com/Radball-Migi/HF-ITCNE24-SemArbeit2-BPMN-Personalprozess
+      title: GitHub Repository
+      icon: github
+
+    - url: https://radball-migi.github.io/HF-ITCNE24-SemArbeit2-BPMN-Personalprozess/
+      title: Projektdokumentation
+      icon: docs
+
 spec:
   type: service
   lifecycle: experimental
-  owner: miguel
+  owner: group:default/hf-itcne24
+  system: semesterarbeiten
